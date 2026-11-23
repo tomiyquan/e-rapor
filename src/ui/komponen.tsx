@@ -1,0 +1,26 @@
+import type { ReactNode, SelectHTMLAttributes } from "react";
+
+export function Bidang({
+  label,
+  children,
+  id,
+}: {
+  label: string;
+  children: ReactNode;
+  id?: string;
+}) {
+  return (
+    <label className="bidang" htmlFor={id}>
+      <span>{label}</span>
+      {children}
+    </label>
+  );
+}
+
+export function Pilih(props: SelectHTMLAttributes<HTMLSelectElement>) {
+  return <select {...props} />;
+}
+
+export function Pesan({ jenis, anak }: { jenis: "info" | "galat" | "baik"; anak: ReactNode }) {
+  return <p className={`pesan pesan-${jenis}`}>{anak}</p>;
+}
