@@ -4,13 +4,16 @@ export function Bidang({
   label,
   children,
   id,
+  lebar,
 }: {
   label: string;
   children: ReactNode;
   id?: string;
+  lebar?: "dua" | "penuh";
 }) {
+  const kelas = lebar === "penuh" ? "bidang bidang-penuh" : lebar === "dua" ? "bidang bidang-dua" : "bidang";
   return (
-    <label className="bidang" htmlFor={id}>
+    <label className={kelas} htmlFor={id}>
       <span>{label}</span>
       {children}
     </label>

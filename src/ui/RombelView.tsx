@@ -45,13 +45,13 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
       <h2>{bagian === "kelas" ? "Kelas dan murid" : "Mata pelajaran rombel"}</h2>
       {bagian === "kelas" && (
       <form
-        className="baris-aksi"
         onSubmit={(event) => {
           event.preventDefault();
           ubah((saatIni) => tambahRombel(saatIni, { kelas, paralel, waliKelas: wali }));
           setWali("");
         }}
       >
+        <div className="kisi kisi-3">
         <Bidang label="Kelas" id="kelas-baru">
           <select id="kelas-baru" value={kelas} onChange={(event) => setKelas(event.target.value)}>
             {daftarKelas(berkas.sekolah.jenjang, berkas.sekolah.programSmk).map((item) => (
@@ -67,7 +67,10 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
         <Bidang label="Wali kelas" id="wali-baru">
           <input id="wali-baru" value={wali} onChange={(event) => setWali(event.target.value)} />
         </Bidang>
-        <button className="tombol" type="submit">Tambah rombel</button>
+        </div>
+        <div className="aksi-formulir">
+          <button className="tombol" type="submit">Tambah rombel</button>
+        </div>
       </form>
       )}
       {berkas.rombel.length === 0 && (
@@ -87,13 +90,15 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
       {rombel && (
         <>
           {bagian === "kelas" && (
-            <Bidang label="Nama wali kelas" id="wali-ubah">
-              <input id="wali-ubah" value={rombel.waliKelas} onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, rombel.id, { waliKelas: event.target.value }))} />
-            </Bidang>
+            <div className="kisi kisi-3">
+              <Bidang label="Nama wali kelas" id="wali-ubah">
+                <input id="wali-ubah" value={rombel.waliKelas} onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, rombel.id, { waliKelas: event.target.value }))} />
+              </Bidang>
+            </div>
           )}
           {bagian === "mapel" && (
             <>
-              <div className="kisi">
+              <div className="kisi kisi-2">
                 <Bidang label="Cara mengolah nilai" id="mode">
                   <select
                     id="mode"
@@ -141,7 +146,6 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
           <h3>Murid</h3>
           <p className="senyap">NISN harus sama dengan yang nanti diisi guru mapel pada lembar kerja. Agama murid memilih nama mata pelajaran agama.</p>
           <form
-            className="baris-aksi"
             onSubmit={(event) => {
               event.preventDefault();
               if (!namaMurid.trim()) return;
@@ -151,6 +155,7 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
               setNis("");
             }}
           >
+            <div className="kisi">
             <Bidang label="Nama" id="nama-murid">
               <input id="nama-murid" value={namaMurid} onChange={(event) => setNamaMurid(event.target.value)} />
             </Bidang>
@@ -167,7 +172,10 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
                 ))}
               </select>
             </Bidang>
-            <button className="tombol" type="submit">Tambah murid</button>
+            </div>
+            <div className="aksi-formulir">
+              <button className="tombol" type="submit">Tambah murid</button>
+            </div>
           </form>
           <div className="tabel-bungkus">
             <table className="tabel">
@@ -178,7 +186,7 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
                   <th>NIS</th>
                   <th>Agama</th>
                   {seni.length > 0 && <th>Seni yang diikuti</th>}
-                  <th />
+                  <th className="kolom-aksi" />
                 </tr>
               </thead>
               <tbody>
@@ -206,7 +214,7 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
                           </select>
                         </td>
                       )}
-                      <td><button className="tombol bahaya" type="button" onClick={() => ubah((saatIni) => hapusMurid(saatIni, item.id))}>Hapus</button></td>
+                      <td className="kolom-aksi"><button className="tombol bahaya" type="button" onClick={() => ubah((saatIni) => hapusMurid(saatIni, item.id))}>Hapus</button></td>
                     </tr>
                   );
                 })}
@@ -262,7 +270,6 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
                 </details>
               )}
               <form
-                className="baris-aksi"
                 onSubmit={(event) => {
                   event.preventDefault();
                   if (!mapelBaru.trim()) return;
@@ -275,6 +282,7 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
                   setMapelBaru("");
                 }}
               >
+                <div className="kisi kisi-2">
                 <Bidang label="Tambah mapel atau muatan lokal" id="mapel-baru">
                   <input id="mapel-baru" value={mapelBaru} onChange={(event) => setMapelBaru(event.target.value)} />
                 </Bidang>
@@ -287,23 +295,28 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
                     <option value="pilihan">Pilihan</option>
                   </select>
                 </Bidang>
-                <button className="tombol kedua" type="submit">Tambah mapel</button>
+                </div>
+                <div className="aksi-formulir">
+                  <button className="tombol kedua" type="submit">Tambah mapel</button>
+                </div>
               </form>
             </>
           )}
           {bagian === "kelas" && (
-            <button
-              className="tombol bahaya"
-              type="button"
-              onClick={() => {
-                if (window.confirm(`Hapus ${namaRombel(rombel)} beserta nilainya?`)) {
-                  ubah((saatIni) => hapusRombel(saatIni, rombel.id));
-                  setRombelId("");
-                }
-              }}
-            >
-              Hapus rombel ini
-            </button>
+            <div className="aksi-formulir">
+              <button
+                className="tombol bahaya"
+                type="button"
+                onClick={() => {
+                  if (window.confirm(`Hapus ${namaRombel(rombel)} beserta nilainya?`)) {
+                    ubah((saatIni) => hapusRombel(saatIni, rombel.id));
+                    setRombelId("");
+                  }
+                }}
+              >
+                Hapus rombel ini
+              </button>
+            </div>
           )}
         </>
       )}

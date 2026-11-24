@@ -69,7 +69,7 @@ export function BerkasView() {
   return (
     <section className="kartu">
       <div className="judul-bagian">
-        <h2>{berkas ? "Data satuan pendidikan" : "Isi data ini, atau buka berkas yang sudah ada"}</h2>
+        <h2>Identitas satuan pendidikan</h2>
         <div className="tombol-baris">
           <label className="tombol kedua">
             Buka berkas
@@ -95,7 +95,7 @@ export function BerkasView() {
       {adaPerubahan && berkas && <Pesan jenis="info" anak="Ada perubahan yang belum disimpan ke berkas." />}
       {galat && <Pesan jenis="galat" anak={galat} />}
       <div className="kisi">
-        <Bidang label="Nama satuan pendidikan" id="nama-sekolah">
+        <Bidang label="Nama satuan pendidikan" id="nama-sekolah" lebar="dua">
           <input id="nama-sekolah" value={draf.nama} onChange={(event) => setDraf({ ...draf, nama: event.target.value })} />
         </Bidang>
         <Bidang label="NPSN" id="npsn">
@@ -145,10 +145,10 @@ export function BerkasView() {
           <input id="tanggal" type="date" value={tanggal} onChange={(event) => setTanggal(event.target.value)} />
         </Bidang>
       </div>
-      <Bidang label="Alamat satuan pendidikan" id="alamat">
+      <Bidang label="Alamat satuan pendidikan" id="alamat" lebar="penuh">
         <textarea id="alamat" value={draf.alamat} onChange={(event) => setDraf({ ...draf, alamat: event.target.value })} />
       </Bidang>
-      <div className="tombol-baris">
+      <div className="aksi-formulir">
         <button className="tombol" type="button" onClick={simpanIdentitas}>
           {berkas ? "Perbarui identitas" : "Buat berkas sekolah"}
         </button>

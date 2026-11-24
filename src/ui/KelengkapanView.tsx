@@ -115,7 +115,7 @@ export function KelengkapanView() {
                 </label>
               ))}
             </div>
-            <div className="kisi">
+            <div className="kisi kisi-2">
               <label className="bidang">Bukti yang sudah baik
                 <input value={kok.buktiKuat} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { buktiKuat: event.target.value }))} />
               </label>
@@ -123,27 +123,31 @@ export function KelengkapanView() {
                 <input value={kok.buktiPerlu} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { buktiPerlu: event.target.value }))} />
               </label>
             </div>
-            <button
-              className="tombol kedua"
-              type="button"
-              onClick={() => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, {
-                deskripsi: drafKokurikuler(kok.dimensiKuat, kok.buktiKuat, kok.dimensiPerlu, kok.buktiPerlu),
-              }))}
-            >
-              Susun narasi kokurikuler
-            </button>
+            <div className="aksi-formulir">
+              <button
+                className="tombol kedua"
+                type="button"
+                onClick={() => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, {
+                  deskripsi: drafKokurikuler(kok.dimensiKuat, kok.buktiKuat, kok.dimensiPerlu, kok.buktiPerlu),
+                }))}
+              >
+                Susun narasi kokurikuler
+              </button>
+            </div>
             <label className="bidang">Deskripsi kokurikuler yang dicetak
               <textarea value={kok.deskripsi} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { deskripsi: event.target.value }))} />
             </label>
             <h3>3. Ekstrakurikuler dan catatan</h3>
             {berkas.ekskul.filter((item) => item.muridId === muridAktif.id).map((item) => (
-              <div className="baris-aksi" key={item.id}>
+              <div className="baris-data" key={item.id}>
                 <input aria-label="Nama ekstrakurikuler" value={item.nama} onChange={(event) => ubah((saatIni) => ubahEkskul(saatIni, item.id, { nama: event.target.value }))} />
                 <input aria-label="Keterangan ekstrakurikuler" value={item.keterangan} onChange={(event) => ubah((saatIni) => ubahEkskul(saatIni, item.id, { keterangan: event.target.value }))} />
                 <button className="tombol bahaya" type="button" onClick={() => ubah((saatIni) => hapusEkskul(saatIni, item.id))}>Hapus</button>
               </div>
             ))}
-            <button className="tombol kedua" type="button" onClick={() => ubah((saatIni) => tambahEkskul(saatIni, muridAktif.id, "Pramuka"))}>Tambah ekstrakurikuler</button>
+            <div className="aksi-formulir">
+              <button className="tombol kedua" type="button" onClick={() => ubah((saatIni) => tambahEkskul(saatIni, muridAktif.id, "Pramuka"))}>Tambah ekstrakurikuler</button>
+            </div>
             <label className="bidang">Catatan wali kelas
               <textarea value={catatan?.catatanWali ?? ""} onChange={(event) => ubah((saatIni) => setCatatan(saatIni, muridAktif.id, { catatanWali: event.target.value }))} />
             </label>

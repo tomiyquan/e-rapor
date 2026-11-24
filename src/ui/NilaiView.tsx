@@ -191,7 +191,7 @@ function EditorSumatif({ mapel }: { mapel: Mapel }) {
     <div>
       <h3>Kegiatan sumatif</h3>
       {daftar.map((item) => (
-        <div className="baris-aksi" key={item.id}>
+        <div className="baris-data" key={item.id}>
           <input aria-label={`Nama ${item.nama}`} value={item.nama} onChange={(event) => ubah((saatIni) => ubahSumatif(saatIni, item.id, { nama: event.target.value }))} />
           <input
             aria-label={`Bobot ${item.nama}`}
@@ -207,7 +207,7 @@ function EditorSumatif({ mapel }: { mapel: Mapel }) {
           <button className="tombol bahaya" type="button" onClick={() => ubah((saatIni) => hapusSumatif(saatIni, item.id))}>Hapus</button>
         </div>
       ))}
-      <form className="baris-aksi" onSubmit={(event) => { event.preventDefault(); ubah((saatIni) => tambahSumatif(saatIni, mapel.id, nama)); setNama(""); }}>
+      <form className="baris-data" onSubmit={(event) => { event.preventDefault(); ubah((saatIni) => tambahSumatif(saatIni, mapel.id, nama)); setNama(""); }}>
         <input aria-label="Nama sumatif baru" value={nama} placeholder="Nama lingkup materi" onChange={(event) => setNama(event.target.value)} />
         <button className="tombol" type="submit">Tambah sumatif</button>
       </form>
@@ -225,7 +225,7 @@ function EditorTujuan({ mapel }: { mapel: Mapel }) {
       <h3>Tujuan pembelajaran</h3>
       <p className="senyap">Tulis tujuan yang benar-benar diajarkan. Bila tujuan bersifat prasyarat berurutan, centang kolom itu pada langkah Mapel agar nilai akhir memakai tujuan terakhir.</p>
       {daftar.map((item) => (
-        <div className="baris-aksi" key={item.id}>
+        <div className="baris-data" key={item.id}>
           <input aria-label={`Tujuan ${item.nama}`} value={item.nama} onChange={(event) => ubah((saatIni) => ubahTujuan(saatIni, item.id, { nama: event.target.value }))} />
           <input
             aria-label={`Bobot ${item.nama}`}
@@ -237,7 +237,7 @@ function EditorTujuan({ mapel }: { mapel: Mapel }) {
           <button className="tombol bahaya" type="button" onClick={() => ubah((saatIni) => hapusTujuan(saatIni, item.id))}>Hapus</button>
         </div>
       ))}
-      <form className="baris-aksi" onSubmit={(event) => { event.preventDefault(); ubah((saatIni) => tambahTujuan(saatIni, mapel.id, nama)); setNama(""); }}>
+      <form className="baris-data" onSubmit={(event) => { event.preventDefault(); ubah((saatIni) => tambahTujuan(saatIni, mapel.id, nama)); setNama(""); }}>
         <input aria-label="Tujuan baru" value={nama} placeholder="Tujuan pembelajaran" onChange={(event) => setNama(event.target.value)} />
         <button className="tombol" type="submit">Tambah tujuan</button>
       </form>
