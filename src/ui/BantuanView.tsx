@@ -6,7 +6,7 @@ export function BantuanView() {
       <ol>
         <li><strong>Sekolah.</strong> Isi identitas satuan pendidikan dan semester, atau buka berkas <strong>.erapor.json</strong> yang sudah ada. Simpan berkas itu ke komputer atau flashdisk.</li>
         <li><strong>Rombel.</strong> Buat kelas, nama rombel, dan wali kelas.</li>
-        <li><strong>Murid.</strong> Daftarkan siswa pada rombel itu. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
+        <li><strong>Murid.</strong> Klik Tambah murid, isi data pada jendela, lalu simpan. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
         <li><strong>Mapel.</strong> Pilih rapor semester atau asesmen penuh. Ambang rombel berlaku untuk semua mapel; isi ambang pada baris mapel bila KKM-nya berbeda. Cara hitung tiap mapel diikuti tab Nilai. Centang Nilai terakhir bila tujuan berurutan dan saling menjadi syarat.</li>
         <li><strong>Nilai.</strong> Unduh format isian per mata pelajaran untuk guru mapel, lalu impor kembali atau ketik nilainya. Sunting deskripsi sebelum dicetak.</li>
         <li><strong>Kelengkapan.</strong> Isi ketidakhadiran, narasi kokurikuler, ekstrakurikuler, dan catatan wali kelas. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>

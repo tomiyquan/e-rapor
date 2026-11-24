@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { daftarKelas } from "../domain/kurikulum";
 import { namaRombel } from "../domain/rapor";
 import { AGAMA, type Agama, type KelompokMapel, type Mapel, type ModePenilaian, type OpsiHitung } from "../domain/types";
@@ -28,6 +28,7 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
   const [nisn, setNisn] = useState("");
   const [nis, setNis] = useState("");
   const [agama, setAgama] = useState<Agama>("Islam");
+  const [formMurid, setFormMurid] = useState(false);
   const [mapelBaru, setMapelBaru] = useState("");
   const [kelompokBaru, setKelompokBaru] = useState<KelompokMapel>("mulok");
 
@@ -150,39 +151,32 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
           )}
           {bagian === "murid" && (
           <>
-          <p className="senyap">NISN harus sama dengan yang nanti diisi guru mapel pada lembar kerja. Agama murid memilih nama mata pelajaran agama.</p>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (!namaMurid.trim()) return;
-              ubah((saatIni) => tambahMurid(saatIni, { rombelId: rombel.id, nama: namaMurid, nisn, nis, agama }));
-              setNamaMurid("");
-              setNisn("");
-              setNis("");
-            }}
-          >
-            <div className="kisi">
-            <Bidang label="Nama" id="nama-murid">
-              <input id="nama-murid" value={namaMurid} onChange={(event) => setNamaMurid(event.target.value)} />
-            </Bidang>
-            <Bidang label="NISN" id="nisn-murid">
-              <input id="nisn-murid" value={nisn} onChange={(event) => setNisn(event.target.value)} />
-            </Bidang>
-            <Bidang label="NIS" id="nis-murid">
-              <input id="nis-murid" value={nis} onChange={(event) => setNis(event.target.value)} />
-            </Bidang>
-            <Bidang label="Agama" id="agama-murid">
-              <select id="agama-murid" value={agama} onChange={(event) => setAgama(event.target.value as Agama)}>
-                {AGAMA.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </Bidang>
-            </div>
-            <div className="aksi-formulir">
-              <button className="tombol" type="submit">Tambah murid</button>
-            </div>
-          </form>
+          <div className="kepala-daftar">
+            <p className="senyap">Daftar siswa rombel ini. Agama memilih nama mata pelajaran agama. Seni dipilih pada tabel setelah murid tersimpan.</p>
+            <button className="tombol" type="button" onClick={() => setFormMurid(true)}>Tambah murid</button>
+          </div>
+          {formMurid && (
+            <ModalMurid
+              nama={namaMurid}
+              nisn={nisn}
+              nis={nis}
+              agama={agama}
+              onNama={setNamaMurid}
+              onNisn={setNisn}
+              onNis={setNis}
+              onAgama={setAgama}
+              onTutup={() => setFormMurid(false)}
+              onSimpan={() => {
+                if (!namaMurid.trim()) return;
+                ubah((saatIni) => tambahMurid(saatIni, { rombelId: rombel.id, nama: namaMurid, nisn, nis, agama }));
+                setNamaMurid("");
+                setNisn("");
+                setNis("");
+                setAgama("Islam");
+                setFormMurid(false);
+              }}
+            />
+          )}
           <div className="tabel-bungkus">
             <table className="tabel">
               <thead>
@@ -196,6 +190,11 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
                 </tr>
               </thead>
               <tbody>
+                {murid.length === 0 && (
+                  <tr>
+                    <td colSpan={seni.length > 0 ? 6 : 5}>Belum ada murid pada rombel ini.</td>
+                  </tr>
+                )}
                 {murid.map((item) => {
                   const seniTerpilih = seni.find((mapelItem) => berkas.pilihan.some((pilihanItem) => pilihanItem.muridId === item.id && pilihanItem.mapelId === mapelItem.id));
                   return (
@@ -408,5 +407,90 @@ function DaftarMapel({
         </tbody>
       </table>
     </div>
+  );
+}
+
+function ModalMurid({
+  nama,
+  nisn,
+  nis,
+  agama,
+  onNama,
+  onNisn,
+  onNis,
+  onAgama,
+  onTutup,
+  onSimpan,
+}: {
+  nama: string;
+  nisn: string;
+  nis: string;
+  agama: Agama;
+  onNama: (nilai: string) => void;
+  onNisn: (nilai: string) => void;
+  onNis: (nilai: string) => void;
+  onAgama: (nilai: Agama) => void;
+  onTutup: () => void;
+  onSimpan: () => void;
+}) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const lepas = useRef(false);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    return () => {
+      lepas.current = true;
+      if (dialog.open) dialog.close();
+    };
+  }, []);
+  return (
+    <dialog
+      className="modal"
+      ref={dialogRef}
+      aria-labelledby="judul-murid"
+      onClose={() => {
+        if (!lepas.current) onTutup();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) event.currentTarget.close();
+      }}
+    >
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSimpan();
+        }}
+      >
+        <div className="modal-kepala">
+          <h3 id="judul-murid">Tambah murid</h3>
+        </div>
+        <div className="modal-isi">
+          <p className="senyap">NISN harus sama dengan yang nanti diisi guru mapel pada lembar kerja. Agama murid memilih nama mata pelajaran agama.</p>
+          <div className="kisi kisi-2">
+            <Bidang label="Nama" id="nama-murid">
+              <input id="nama-murid" value={nama} autoFocus onChange={(event) => onNama(event.target.value)} />
+            </Bidang>
+            <Bidang label="NISN" id="nisn-murid">
+              <input id="nisn-murid" value={nisn} onChange={(event) => onNisn(event.target.value)} />
+            </Bidang>
+            <Bidang label="NIS" id="nis-murid">
+              <input id="nis-murid" value={nis} onChange={(event) => onNis(event.target.value)} />
+            </Bidang>
+            <Bidang label="Agama" id="agama-murid">
+              <select id="agama-murid" value={agama} onChange={(event) => onAgama(event.target.value as Agama)}>
+                {AGAMA.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </Bidang>
+          </div>
+        </div>
+        <div className="modal-aksi">
+          <button className="tombol kedua" type="button" onClick={() => dialogRef.current?.close()}>Batal</button>
+          <button className="tombol" type="submit">Simpan</button>
+        </div>
+      </form>
+    </dialog>
   );
 }

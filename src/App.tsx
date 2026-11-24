@@ -52,7 +52,7 @@ const LANGKAH: Langkah[] = [
     judul: "Daftarkan murid pada rombel",
     urut: [
       "Pilih rombel yang sudah dibuat.",
-      "Isi nama, NISN, dan agama, lalu klik Tambah murid. Agama menentukan mata pelajaran agama di rapor.",
+      "Klik Tambah murid. Isi nama, NISN, dan agama pada jendela, lalu simpan. Agama menentukan mata pelajaran agama di rapor.",
       "Bila ada seni, pilih satu jenis untuk tiap murid.",
     ],
   },

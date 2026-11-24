@@ -171,6 +171,35 @@ textarea { resize: vertical; }
   padding-top: 14px;
   border-top: 1px solid var(--garis);
 }
+.kepala-daftar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 12px;
+}
+.kepala-daftar p { margin: 0; flex: 1 1 16rem; }
+dialog.modal {
+  width: min(36rem, calc(100vw - 32px));
+  padding: 0;
+  font: inherit;
+  border: 1px solid var(--garis);
+  border-radius: 6px;
+  color: var(--tinta);
+  box-shadow: 0 16px 40px rgba(14, 32, 52, 0.22);
+}
+dialog.modal::backdrop { background: rgba(14, 32, 52, 0.45); }
+.modal-kepala, .modal-isi, .modal-aksi { padding: 14px 16px; }
+.modal-kepala { border-bottom: 1px solid var(--garis); }
+.modal-kepala h3 { margin: 0; font-size: 1.05rem; }
+.modal-isi p { margin-top: 0; }
+.modal-aksi {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--garis);
+}
 .tombol, button.tombol, label.tombol {
   display: inline-flex;
   align-items: center;
