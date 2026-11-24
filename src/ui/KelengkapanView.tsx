@@ -23,7 +23,7 @@ export function KelengkapanView() {
     return (
       <section className="kartu">
         <h2>Kelengkapan rapor</h2>
-        <p>Lengkapi bagian ini setelah murid terdaftar. Kembali ke langkah Rombel bila kelas masih kosong.</p>
+        <p>Lengkapi bagian ini setelah murid terdaftar. Buat kelas pada langkah Rombel, lalu daftarkan siswa pada langkah Murid.</p>
       </section>
     );
   }

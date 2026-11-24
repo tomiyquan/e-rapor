@@ -5,7 +5,8 @@ export function BantuanView() {
       <p>Buka <strong>e-rapor.html</strong> dengan Chrome, Edge, atau Firefox. Tidak perlu memasang XAMPP atau server. Bilah di atas halaman adalah urutan kerja wali kelas. Selesaikan satu langkah, lalu klik Lanjut.</p>
       <ol>
         <li><strong>Sekolah.</strong> Isi identitas satuan pendidikan dan semester, atau buka berkas <strong>.erapor.json</strong> yang sudah ada. Simpan berkas itu ke komputer atau flashdisk.</li>
-        <li><strong>Rombel.</strong> Buat kelas dan daftarkan murid. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
+        <li><strong>Rombel.</strong> Buat kelas, nama rombel, dan wali kelas.</li>
+        <li><strong>Murid.</strong> Daftarkan siswa pada rombel itu. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
         <li><strong>Mapel.</strong> Pilih rapor semester atau asesmen penuh, isi ambang ketercapaian sekolah, lalu centang mapel yang diajarkan. Mapel pilihan SMA, kejuruan SMK, dan Bahasa Inggris SD/MI diaktifkan hanya bila memang dipakai.</li>
         <li><strong>Nilai.</strong> Unduh format isian per mata pelajaran untuk guru mapel, lalu impor kembali atau ketik nilainya. Sunting deskripsi sebelum dicetak.</li>
         <li><strong>Kelengkapan.</strong> Isi ketidakhadiran, narasi kokurikuler, ekstrakurikuler, dan catatan wali kelas. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>

@@ -30,7 +30,7 @@ export function NilaiView() {
     return (
       <section className="kartu">
         <h2>Nilai</h2>
-        <p>Langkah ini terbuka setelah rombel dan murid ada. Kembali ke langkah Rombel, tambahkan kelas, lalu lanjut ke Mapel.</p>
+        <p>Langkah ini terbuka setelah rombel dan murid ada. Buat kelas pada langkah Rombel, lalu daftarkan siswa pada langkah Murid.</p>
       </section>
     );
   }

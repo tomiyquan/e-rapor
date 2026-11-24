@@ -18,7 +18,7 @@ import {
 import { useBerkas } from "../state/BerkasContext";
 import { Bidang } from "./komponen";
 
-export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
+export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) {
   const { berkas, ubah } = useBerkas();
   const [rombelId, setRombelId] = useState(berkas?.rombel[0]?.id ?? "");
   const [kelas, setKelas] = useState(daftarKelas(berkas?.sekolah.jenjang ?? "SD", berkas?.sekolah.programSmk ?? 3)[0]?.nilai ?? "1");
@@ -42,7 +42,7 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
 
   return (
     <section className="kartu">
-      <h2>{bagian === "kelas" ? "Kelas dan murid" : "Mata pelajaran rombel"}</h2>
+      <h2>{bagian === "kelas" ? "Rombel" : bagian === "murid" ? "Murid" : "Mata pelajaran rombel"}</h2>
       {bagian === "kelas" && (
       <form
         onSubmit={(event) => {
@@ -77,7 +77,9 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
         <p className="senyap">
           {bagian === "kelas"
             ? "Belum ada rombel. Daftar mata pelajaran awal akan mengikuti jenjang sekolah."
-            : "Belum ada rombel. Kembali ke langkah Rombel, lalu tambahkan kelas dan murid."}
+            : bagian === "murid"
+              ? "Belum ada rombel. Kembali ke langkah Rombel dan buat kelas terlebih dahulu."
+              : "Belum ada rombel. Kembali ke langkah Rombel, lalu tambahkan kelas."}
         </p>
       )}
       <div className="daftar-rombel">
@@ -141,9 +143,8 @@ export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
               </p>
             </>
           )}
-          {bagian === "kelas" && (
+          {bagian === "murid" && (
           <>
-          <h3>Murid</h3>
           <p className="senyap">NISN harus sama dengan yang nanti diisi guru mapel pada lembar kerja. Agama murid memilih nama mata pelajaran agama.</p>
           <form
             onSubmit={(event) => {

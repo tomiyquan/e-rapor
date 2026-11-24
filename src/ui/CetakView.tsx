@@ -17,7 +17,7 @@ export function CetakView() {
     return (
       <section className="kartu">
         <h2>Cetak</h2>
-        <p>Rapor bisa dicetak setelah rombel dan murid terisi. Selesaikan langkah Rombel terlebih dahulu.</p>
+        <p>Rapor bisa dicetak setelah rombel dan murid terisi. Selesaikan langkah Rombel dan Murid terlebih dahulu.</p>
       </section>
     );
   }

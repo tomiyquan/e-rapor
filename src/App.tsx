@@ -8,7 +8,7 @@ import { KelengkapanView } from "./ui/KelengkapanView";
 import { NilaiView } from "./ui/NilaiView";
 import { RombelView } from "./ui/RombelView";
 
-type Layar = "berkas" | "rombel" | "mapel" | "nilai" | "kelengkapan" | "cetak" | "bantuan";
+type Layar = "berkas" | "rombel" | "murid" | "mapel" | "nilai" | "kelengkapan" | "cetak" | "bantuan";
 
 interface Langkah {
   id: Exclude<Layar, "bantuan">;
@@ -24,7 +24,7 @@ const LANGKAH: Langkah[] = [
     id: "berkas",
     data: "Berkas",
     label: "Sekolah",
-    ringkas: "Identitas semester",
+    ringkas: "Identitas",
     judul: "Mulai dari identitas sekolah",
     urut: [
       "Isi nama satuan pendidikan, jenjang, dan semester pada formulir.",
@@ -36,11 +36,23 @@ const LANGKAH: Langkah[] = [
     id: "rombel",
     data: "Rombel",
     label: "Rombel",
-    ringkas: "Kelas dan murid",
-    judul: "Buat rombel, lalu daftarkan murid",
+    ringkas: "Kelas",
+    judul: "Buat rombel",
     urut: [
-      "Pilih kelas, nama rombel, dan wali kelas, lalu klik Tambah rombel.",
-      "Tambahkan murid beserta NISN dan agama. Agama menentukan mata pelajaran agama di rapor.",
+      "Pilih kelas, nama rombel, dan wali kelas.",
+      "Klik Tambah rombel. Satu berkas boleh berisi lebih dari satu rombel.",
+      "Lanjut ke Murid untuk mendaftarkan siswa rombel itu.",
+    ],
+  },
+  {
+    id: "murid",
+    data: "Murid",
+    label: "Murid",
+    ringkas: "Siswa",
+    judul: "Daftarkan murid pada rombel",
+    urut: [
+      "Pilih rombel yang sudah dibuat.",
+      "Isi nama, NISN, dan agama, lalu klik Tambah murid. Agama menentukan mata pelajaran agama di rapor.",
       "Bila ada seni, pilih satu jenis untuk tiap murid.",
     ],
   },
@@ -48,7 +60,7 @@ const LANGKAH: Langkah[] = [
     id: "mapel",
     data: "Mapel",
     label: "Mapel",
-    ringkas: "Cara menghitung",
+    ringkas: "Cara nilai",
     judul: "Pilih cara nilai dan mata pelajaran",
     urut: [
       "Pilih rapor semester atau asesmen penuh. Pilihan ini berlaku untuk rombel yang sedang dibuka.",
@@ -60,7 +72,7 @@ const LANGKAH: Langkah[] = [
     id: "nilai",
     data: "Nilai",
     label: "Nilai",
-    ringkas: "Isian guru mapel",
+    ringkas: "Isian guru",
     judul: "Masukkan nilai dari guru mapel",
     urut: [
       "Pilih satu mata pelajaran.",
@@ -72,7 +84,7 @@ const LANGKAH: Langkah[] = [
     id: "kelengkapan",
     data: "Kelengkapan",
     label: "Kelengkapan",
-    ringkas: "Di luar nilai mapel",
+    ringkas: "Selain nilai",
     judul: "Lengkapi bagian rapor di luar nilai",
     urut: [
       "Isi sakit, izin, dan tanpa keterangan untuk seluruh murid.",
@@ -84,7 +96,7 @@ const LANGKAH: Langkah[] = [
     id: "cetak",
     data: "Cetak",
     label: "Cetak",
-    ringkas: "Rapor dan leger",
+    ringkas: "Rapor",
     judul: "Periksa kelengkapan, lalu cetak",
     urut: [
       "Baca daftar murid. Mapel tanpa deskripsi dan kokurikuler yang kosong disebut di sana.",
@@ -97,7 +109,8 @@ const LANGKAH: Langkah[] = [
 function langkahSelesai(id: Langkah["id"], berkas: Berkas | null): boolean {
   if (!berkas) return false;
   if (id === "berkas") return true;
-  if (id === "rombel") return berkas.rombel.length > 0 && berkas.murid.length > 0;
+  if (id === "rombel") return berkas.rombel.length > 0;
+  if (id === "murid") return berkas.murid.length > 0;
   if (id === "mapel") {
     const agama = new Set(berkas.mapel.filter((item) => item.jenis === "agama").map((item) => item.id));
     return berkas.rombel.some((item) => item.ambang !== null || item.mode === "asesmen" || item.sembunyikanAngka)
@@ -114,9 +127,9 @@ function langkahSelesai(id: Langkah["id"], berkas: Berkas | null): boolean {
 }
 
 function petunjukBerikut(berkas: Berkas | null): string {
-  if (!berkas) return "Ikuti langkah 1 sampai 6. Mulai dengan mengisi identitas sekolah.";
+  if (!berkas) return "Ikuti langkah 1 sampai 7. Mulai dengan mengisi identitas sekolah.";
   const belum = LANGKAH.find((item) => !langkahSelesai(item.id, berkas));
-  if (!belum) return "Enam langkah sudah terisi. Periksa rapor, cetak, lalu simpan berkas.";
+  if (!belum) return "Tujuh langkah sudah terisi. Periksa rapor, cetak, lalu simpan berkas.";
   return `Berikutnya: langkah ${LANGKAH.indexOf(belum) + 1}, ${belum.label.toLowerCase()}.`;
 }
 
@@ -197,6 +210,7 @@ export function App() {
         )}
         {aktif === "berkas" && <BerkasView />}
         {aktif === "rombel" && <RombelView bagian="kelas" />}
+        {aktif === "murid" && <RombelView bagian="murid" />}
         {aktif === "mapel" && <RombelView bagian="mapel" />}
         {aktif === "nilai" && <NilaiView />}
         {aktif === "kelengkapan" && <KelengkapanView />}
