@@ -87,7 +87,8 @@ export function butirDeskripsi(berkas: Berkas, rombel: Rombel, mapel: Mapel, mur
 }
 
 export function susunDraf(berkas: Berkas, rombel: Rombel, mapel: Mapel, muridId: string): string {
-  return drafDeskripsi(butirDeskripsi(berkas, rombel, mapel, muridId), ambangBerlaku(mapel, rombel));
+  const butir = butirDeskripsi(berkas, rombel, mapel, muridId);
+  return drafDeskripsi(butir, ambangBerlaku(mapel, rombel), rombel.mode === "asesmen" && butir.length > 1);
 }
 
 export function barisRapor(berkas: Berkas, rombel: Rombel, murid: Murid): BarisRapor[] {

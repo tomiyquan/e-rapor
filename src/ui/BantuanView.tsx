@@ -8,7 +8,7 @@ export function BantuanView() {
         <li><strong>Rombel.</strong> Klik Tambah rombel. Isi kelas, nama rombel, dan wali kelas pada jendela. Daftar rombel tampil sebagai tabel.</li>
         <li><strong>Murid.</strong> Klik Tambah murid, isi data pada jendela, lalu simpan. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
         <li><strong>Mapel.</strong> Pilih rapor semester atau asesmen penuh. Ambang rombel berlaku untuk semua mapel; isi ambang pada baris mapel bila KKM-nya berbeda. Cara hitung tiap mapel diikuti tab Nilai. Centang Nilai terakhir bila tujuan berurutan dan saling menjadi syarat.</li>
-        <li><strong>Nilai.</strong> Ikuti nomor 1, 2, dan 3 pada halaman. Capaian kompetensi terisi sendiri setelah angka nilai ada, dan masih bisa disunting.</li>
+        <li><strong>Nilai.</strong> Ikuti nomor 1, 2, dan 3 pada halaman. Capaian kompetensi terisi sendiri setelah angka nilai ada. Bila ada lebih dari satu tujuan, semuanya disebut dalam kalimat, lalu masih bisa disunting.</li>
         <li><strong>Kelengkapan.</strong> Pilih rombel, lalu pilih nama murid. Isi ketidakhadiran dan narasi kokurikuler. Contoh narasi tertulis pada kotak sebagai penuntun. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>
         <li><strong>Cetak.</strong> Periksa rapor dan leger, lalu simpan berkas sekolah lagi.</li>
       </ol>

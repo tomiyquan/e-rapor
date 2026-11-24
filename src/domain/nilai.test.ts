@@ -6,7 +6,7 @@ import { bacaLembar, buatLembar } from "./lembar";
 import { hitungNilaiAkhir } from "./nilai";
 import { ambangBerlaku, hasilMapel, rekapCsv, teksCaraHitung, urutanRekap } from "./rapor";
 import { templatMapel } from "./kurikulum";
-import { buatBerkas, setNilaiSumatif, tambahMurid, tambahRombel, tambahSumatif, ubahMapel, ubahRombel } from "./ubah";
+import { buatBerkas, setNilaiSumatif, setNilaiTujuan, tambahMurid, tambahRombel, tambahSumatif, tambahTujuan, ubahMapel, ubahRombel } from "./ubah";
 import type { Berkas } from "./types";
 
 const edo = [
@@ -140,6 +140,40 @@ describe("draf deskripsi dan kokurikuler", () => {
     );
     expect(teks).toBe(
       "Menunjukkan penguasaan yang baik dalam menentukan peluang dan frekuensi harapan. Perlu pendampingan dalam menggunakan diagram pencar.",
+    );
+  });
+
+  it("menyebut semua tujuan bila lebih dari satu", () => {
+    const teks = drafDeskripsi(
+      [
+        { nama: "menjumlah bilangan cacah", nilai: 90, skala: null },
+        { nama: "mengukur panjang", nilai: 80, skala: null },
+        { nama: "menyajikan data", nilai: 60, skala: null },
+      ],
+      75,
+      true,
+    );
+    expect(teks).toBe(
+      "Menunjukkan penguasaan yang baik dalam menjumlah bilangan cacah dan mengukur panjang. Perlu pendampingan dalam menyajikan data.",
+    );
+  });
+
+  it("menyusun capaian semua tujuan pada asesmen penuh", () => {
+    let berkas = sekolahDasar();
+    const rombel = berkas.rombel[0];
+    berkas = ubahRombel(berkas, rombel.id, { ambang: 75, mode: "asesmen" });
+    const matematika = berkas.mapel.find((item) => item.kode === "matematika")!;
+    const edo = berkas.murid.find((item) => item.nama === "Edo")!;
+    for (const nama of ["menjumlah bilangan cacah", "mengukur panjang", "menyajikan data"]) {
+      berkas = tambahTujuan(berkas, matematika.id, nama);
+    }
+    const tujuan = berkas.tujuan.filter((item) => item.mapelId === matematika.id);
+    berkas = setNilaiTujuan(berkas, edo.id, tujuan[0].id, { nilai: 90 });
+    berkas = setNilaiTujuan(berkas, edo.id, tujuan[1].id, { nilai: 80 });
+    berkas = setNilaiTujuan(berkas, edo.id, tujuan[2].id, { nilai: 60 });
+    const teks = berkas.deskripsi.find((item) => item.muridId === edo.id && item.mapelId === matematika.id)?.teks ?? "";
+    expect(teks).toBe(
+      "Menunjukkan penguasaan yang baik dalam menjumlah bilangan cacah dan mengukur panjang. Perlu pendampingan dalam menyajikan data.",
     );
   });
 

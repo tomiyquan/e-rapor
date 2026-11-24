@@ -97,7 +97,7 @@ export function NilaiView() {
       {mapel && rombel.mode === "semester" && <EditorSumatif mapel={mapel} />}
       {mapel && rombel.mode === "asesmen" && <EditorTujuan mapel={mapel} />}
       <h3>3. Isi nilai, capaian kompetensi menyusul sendiri</h3>
-      <p className="senyap">Ketik nilai pada tabel, atau unduh format untuk guru mapel lalu impor kembali. Capaian kompetensi terisi otomatis begitu ada angka. Sunting kalimat bila perlu; mengubah nilai akan menyusun ulang kalimat itu.</p>
+      <p className="senyap">Ketik nilai pada tabel, atau unduh format untuk guru mapel lalu impor kembali. Capaian kompetensi terisi otomatis begitu ada angka. Bila tujuan pembelajaran lebih dari satu, kalimat menyebut semuanya: yang mencapai ambang, lalu yang masih perlu pendampingan. Sunting bila perlu; mengubah nilai akan menyusun ulang kalimat itu.</p>
       <div className="tombol-baris">
         <button className="tombol kedua" type="button" onClick={unduh} disabled={!mapel}>Unduh format isian</button>
         <label className="tombol kedua">

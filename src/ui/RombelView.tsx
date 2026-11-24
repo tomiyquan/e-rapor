@@ -184,7 +184,7 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
               <p className="senyap">
                 {rombel.mode === "semester"
                   ? "Rapor semester memakai beberapa nilai sumatif. Deskripsi diketik wali kelas pada langkah Nilai."
-                  : "Asesmen penuh memakai tujuan pembelajaran. Draf deskripsi diambil dari capaian tertinggi dan yang masih perlu pendampingan."}
+                  : "Asesmen penuh memakai tujuan pembelajaran. Bila tujuan lebih dari satu, capaian kompetensi menyebut semua tujuan yang sudah dinilai."}
                 {" "}Asesmen formatif tidak masuk nilai akhir.
               </p>
             </>
