@@ -91,7 +91,7 @@ export function KelengkapanView() {
                 onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { kegiatan: event.target.value }))}
               />
             </label>
-            <p className="senyap">Pilih dimensi yang sudah dikuatkan dan yang masih perlu penguatan. Yang tercetak tetap satu narasi, bukan angka.</p>
+            <p className="senyap">Centang dimensinya. Bukti diketik sendiri karena berbeda untuk tiap murid, dan boleh dikosongkan. Contoh di dalam kotak menunjukkan potongan kalimat yang akan disambung ke narasi.</p>
             <div className="dimensi">
               {DIMENSI_PROFIL.map((dimensi) => (
                 <label key={dimensi.id} className="centang">
@@ -120,10 +120,18 @@ export function KelengkapanView() {
             </div>
             <div className="kisi kisi-2">
               <label className="bidang">Bukti yang sudah baik
-                <input value={kok.buktiKuat} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { buktiKuat: event.target.value }))} />
+                <textarea
+                  value={kok.buktiKuat}
+                  placeholder="Contoh: menyelesaikan tugas projek tanpa diingatkan"
+                  onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { buktiKuat: event.target.value }))}
+                />
               </label>
               <label className="bidang">Hal yang masih perlu pendampingan
-                <input value={kok.buktiPerlu} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { buktiPerlu: event.target.value }))} />
+                <textarea
+                  value={kok.buktiPerlu}
+                  placeholder="Contoh: saat bekerja dalam kelompok"
+                  onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { buktiPerlu: event.target.value }))}
+                />
               </label>
             </div>
             <div className="aksi-formulir">
