@@ -4,13 +4,14 @@ export function BantuanView() {
       <h2>Cara memakai</h2>
       <p>Buka <strong>e-rapor.html</strong> dengan Chrome, Edge, atau Firefox. Tidak perlu memasang XAMPP atau server. Bilah di atas halaman adalah urutan kerja wali kelas. Langkah berikutnya baru bisa dibuka setelah langkah yang sedang dikerjakan terisi.</p>
       <ol>
-        <li><strong>Sekolah.</strong> Isi identitas satuan pendidikan dan semester, atau buka berkas <strong>.erapor.json</strong> yang sudah ada. Simpan berkas itu ke komputer atau flashdisk.</li>
+        <li><strong>Sekolah.</strong> Pemakaian pertama: isi identitas satuan pendidikan dan semester. Bila komputer ini sudah menyimpan rapor, pilih rapor pada daftar atau buat rapor semester baru. Berkas <strong>.erapor.json</strong> dari komputer lain tetap bisa dibuka.</li>
         <li><strong>Rombel.</strong> Klik Tambah rombel. Isi kelas, nama rombel, dan wali kelas pada jendela. Daftar rombel tampil sebagai tabel.</li>
         <li><strong>Murid.</strong> Klik Tambah murid, isi data pada jendela, lalu simpan. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
         <li><strong>Mapel.</strong> Pilih rapor semester atau asesmen penuh. Ambang rombel berlaku untuk semua mapel; isi ambang pada baris mapel bila KKM-nya berbeda. Cara hitung tiap mapel diikuti tab Nilai. Centang Nilai terakhir bila tujuan berurutan dan saling menjadi syarat.</li>
         <li><strong>Nilai.</strong> Ikuti nomor 1, 2, dan 3 pada halaman. Capaian kompetensi terisi sendiri setelah angka nilai ada. Bila ada lebih dari satu tujuan, semuanya disebut dalam kalimat, lalu masih bisa disunting.</li>
         <li><strong>Kelengkapan.</strong> Pilih rombel, lalu pilih nama murid. Isi ketidakhadiran dan narasi kokurikuler. Dimensi dicentang. Bukti yang sudah baik dan yang masih perlu pendampingan diketik wali kelas; contohnya tertulis di dalam kotak. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>
-        <li><strong>Cetak.</strong> Periksa rapor dan leger, lalu simpan berkas sekolah lagi.</li>
+        <li><strong>Cetak.</strong> Periksa rapor dan leger, lalu cetak. Unduh rekap bila perlu.</li>
+        <li><strong>Simpan.</strong> Klik Simpan rapor. Semester ini masuk ke daftar di tab Sekolah, dan berkas <strong>.erapor.json</strong> terunduh sebagai cadangan. Semester yang sama diperbarui. Semester lain tetap tersimpan terpisah.</li>
       </ol>
       <h2>Yang dihitung</h2>
       <p>

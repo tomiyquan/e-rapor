@@ -24,17 +24,16 @@ Perintah `npm run build` menulis ulang `e-rapor.html`.
 
 ## Cara memakai
 
-Tujuh langkah di bilah atas dikunci berurutan. Langkah berikutnya baru terbuka setelah langkah yang sedang dikerjakan terisi. Langkah yang sudah lewat tetap bisa dibuka.
+Delapan langkah di bilah atas dikunci berurutan. Langkah berikutnya baru terbuka setelah langkah yang sedang dikerjakan terisi. Langkah yang sudah lewat tetap bisa dibuka.
 
-1. **Sekolah.** Isi identitas satuan pendidikan dan semester, lalu klik Buat berkas sekolah. Atau buka berkas `.erapor.json` yang sudah ada. Simpan berkas itu ke komputer atau flashdisk.
+1. **Sekolah.** Pemakaian pertama: isi identitas satuan pendidikan dan semester, lalu klik Buat berkas sekolah. Bila komputer ini sudah menyimpan rapor, pilih rapor pada daftar atau buat rapor semester baru. Berkas `.erapor.json` dari komputer lain tetap bisa dibuka.
 2. **Rombel.** Klik Tambah rombel. Isi kelas, nama rombel, dan wali kelas pada jendela. Daftar rombel tampil sebagai tabel.
 3. **Murid.** Klik Tambah murid. Isi nama, NISN, dan agama pada jendela. Agama menentukan mata pelajaran agama. Seni dipilih pada baris murid.
 4. **Mapel.** Pilih rapor semester atau asesmen penuh, lalu isi ambang rombel. Angka itu berlaku untuk semua mapel. Isi kolom ambang pada satu mapel bila KKM-nya berbeda. Langkah Nilai terbuka setelah ambang rombel terisi.
 5. **Nilai.** Ikuti nomor pada halaman: pilih mapel, sesuaikan kegiatan, lalu isi angka. Capaian kompetensi terisi sendiri setelah ada nilai, dan masih bisa disunting.
 6. **Kelengkapan.** Pilih rombel, lalu pilih nama murid. Isi ketidakhadiran, narasi kokurikuler, ekstrakurikuler, dan catatan wali kelas. Kotak kokurikuler memuat contoh narasi. Pada semester genap, catat keputusan musyawarah.
 7. **Cetak.** Periksa rapor dan leger, lalu cetak. Unduh rekap bila perlu. Rekap mengurutkan murid dari peringkat 1.
-
-Setelah selesai, kembali ke Sekolah dan klik Simpan berkas.
+8. **Simpan.** Klik Simpan rapor. Semester ini masuk ke daftar di tab Sekolah, dan berkas `.erapor.json` terunduh sebagai cadangan. Saat aplikasi dibuka lagi, rapor itu bisa dipilih. Semester yang sama diperbarui. Semester lain tetap tersimpan terpisah.
 
 ## Video tutorial
 

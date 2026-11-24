@@ -42,7 +42,7 @@ export function CetakView() {
             </button>
           </div>
         </div>
-        <p className="senyap">Rekap nilai mengurutkan murid dari peringkat terkecil. Nomor 1 adalah rata-rata tertinggi. Lembar rapor murid tidak mencetak peringkat.</p>
+        <p className="senyap">Rekap nilai mengurutkan murid dari peringkat terkecil. Nomor 1 adalah rata-rata tertinggi. Lembar rapor murid tidak mencetak peringkat. Setelah cetak, lanjut ke langkah Simpan supaya rapor ini muncul lagi saat aplikasi dibuka.</p>
         <div className="baris-aksi">
           <label className="bidang">Rombel
             <select value={rombel.id} onChange={(event) => { setRombelId(event.target.value); setMuridId(""); setMode("satu"); }}>

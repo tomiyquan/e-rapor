@@ -7,8 +7,9 @@ import { CetakView } from "./ui/CetakView";
 import { KelengkapanView } from "./ui/KelengkapanView";
 import { NilaiView } from "./ui/NilaiView";
 import { RombelView } from "./ui/RombelView";
+import { SimpanView } from "./ui/SimpanView";
 
-type Layar = "berkas" | "rombel" | "murid" | "mapel" | "nilai" | "kelengkapan" | "cetak" | "bantuan";
+type Layar = "berkas" | "rombel" | "murid" | "mapel" | "nilai" | "kelengkapan" | "cetak" | "simpan" | "bantuan";
 
 interface Langkah {
   id: Exclude<Layar, "bantuan">;
@@ -29,7 +30,7 @@ const LANGKAH: Langkah[] = [
     urut: [
       "Isi nama satuan pendidikan, jenjang, dan semester pada formulir.",
       "Klik Buat berkas sekolah. Satu berkas menyimpan satu semester.",
-      "Kalau berkas semester ini sudah ada, klik Buka berkas dan pilih .erapor.json.",
+      "Kalau komputer ini sudah pernah dipakai, pilih rapor pada daftar atau buat semester baru.",
     ],
   },
   {
@@ -102,12 +103,24 @@ const LANGKAH: Langkah[] = [
     urut: [
       "Baca daftar murid. Mapel tanpa deskripsi dan kokurikuler yang kosong disebut di sana.",
       "Pilih murid untuk melihat rapor sebelum dicetak.",
-      "Cetak rapor atau leger. Setelah selesai, kembali ke Sekolah dan klik Simpan berkas.",
+      "Cetak rapor atau leger, lalu lanjut ke langkah Simpan.",
+    ],
+  },
+  {
+    id: "simpan",
+    data: "Simpan",
+    label: "Simpan",
+    ringkas: "Arsip",
+    judul: "Simpan rapor di komputer ini",
+    urut: [
+      "Klik Simpan rapor. Semester ini masuk ke daftar pada tab Sekolah.",
+      "Berkas .erapor.json ikut terunduh sebagai cadangan untuk komputer lain.",
+      "Saat aplikasi dibuka lagi, pilih rapor itu atau buat rapor semester berikutnya.",
     ],
   },
 ];
 
-function langkahSelesai(id: Langkah["id"], berkas: Berkas | null): boolean {
+function langkahSelesai(id: Langkah["id"], berkas: Berkas | null, tersimpanDiArsip: boolean): boolean {
   if (!berkas) return false;
   if (id === "berkas") return true;
   if (id === "rombel") return berkas.rombel.length > 0;
@@ -116,25 +129,51 @@ function langkahSelesai(id: Langkah["id"], berkas: Berkas | null): boolean {
   if (id === "nilai") {
     return berkas.nilaiSumatif.some((item) => item.nilai !== null) || berkas.nilaiTujuan.some((item) => item.nilai !== null);
   }
-  if (id === "kelengkapan") return berkas.kokurikuler.some((item) => item.deskripsi.trim().length > 0);
-  return berkas.kokurikuler.some((item) => item.deskripsi.trim().length > 0);
+  if (id === "kelengkapan" || id === "cetak") return berkas.kokurikuler.some((item) => item.deskripsi.trim().length > 0);
+  return tersimpanDiArsip && berkas.kokurikuler.some((item) => item.deskripsi.trim().length > 0);
 }
 
-function langkahTerbuka(id: Langkah["id"], berkas: Berkas | null): boolean {
+function langkahTerbuka(id: Langkah["id"], berkas: Berkas | null, tersimpanDiArsip: boolean): boolean {
   const indeks = LANGKAH.findIndex((item) => item.id === id);
   if (indeks <= 0) return true;
-  return LANGKAH.slice(0, indeks).every((item) => langkahSelesai(item.id, berkas));
+  return LANGKAH.slice(0, indeks).every((item) => langkahSelesai(item.id, berkas, tersimpanDiArsip));
 }
 
-function petunjukBerikut(berkas: Berkas | null): string {
-  if (!berkas) return "Ikuti langkah 1 sampai 7. Mulai dengan mengisi identitas sekolah.";
-  const belum = LANGKAH.find((item) => !langkahSelesai(item.id, berkas));
-  if (!belum) return "Tujuh langkah sudah terisi. Periksa rapor, cetak, lalu simpan berkas.";
+function judulLangkah(aktif: Layar, berkas: Berkas | null, adaRiwayat: boolean): string {
+  if (aktif === "berkas" && berkas) return "Periksa identitas semester ini";
+  if (aktif === "berkas" && adaRiwayat) return "Pilih rapor atau buat yang baru";
+  const indeks = LANGKAH.findIndex((item) => item.id === aktif);
+  return LANGKAH[indeks]?.judul ?? "";
+}
+
+function isiLangkah(aktif: Layar, berkas: Berkas | null, adaRiwayat: boolean): string[] {
+  if (aktif === "berkas" && berkas) {
+    return [
+      "Periksa identitas, tahun ajaran, dan tanggal rapor.",
+      "Klik Perbarui identitas bila ada yang diubah.",
+      "Rapor masuk ke daftar komputer pada langkah Simpan, setelah cetak.",
+    ];
+  }
+  if (aktif === "berkas" && adaRiwayat) {
+    return [
+      "Pilih rapor pada daftar, lalu klik Buka rapor.",
+      "Klik Buat rapor baru untuk semester berikutnya. Identitas sekolah disalin dan masih bisa diubah.",
+      "Berkas .erapor.json dari komputer lain dibuka lewat Buka berkas.",
+    ];
+  }
+  const indeks = LANGKAH.findIndex((item) => item.id === aktif);
+  return LANGKAH[indeks]?.urut ?? [];
+}
+
+function petunjukBerikut(berkas: Berkas | null, tersimpanDiArsip: boolean): string {
+  if (!berkas) return `Ikuti langkah 1 sampai ${LANGKAH.length}. Mulai dari tab Sekolah.`;
+  const belum = LANGKAH.find((item) => !langkahSelesai(item.id, berkas, tersimpanDiArsip));
+  if (!belum) return "Semua langkah sudah terisi. Rapor semester ini tersimpan di komputer ini.";
   return `Berikutnya: langkah ${LANGKAH.indexOf(belum) + 1}, ${belum.label.toLowerCase()}.`;
 }
 
 export function App() {
-  const { siap, berkas, adaPerubahan } = useBerkas();
+  const { siap, berkas, draf, arsip, adaPerubahan, tersimpanDiArsip } = useBerkas();
   const [layar, setLayar] = useState<Layar>("berkas");
   if (!siap) return <p className="isi">Membuka salinan kerja…</p>;
 
@@ -148,7 +187,7 @@ export function App() {
       setLayar(id);
       return;
     }
-    if (!langkahTerbuka(id, berkas)) return;
+    if (!langkahTerbuka(id, berkas, tersimpanDiArsip)) return;
     setLayar(id);
   }
 
@@ -165,15 +204,15 @@ export function App() {
               Bantuan
             </button>
             <p className="status-simpan">
-              {petunjukBerikut(berkas)}
-              {berkas && adaPerubahan ? " Perubahan belum disimpan ke berkas." : ""}
+              {petunjukBerikut(berkas, tersimpanDiArsip)}
+              {berkas && adaPerubahan ? " Perubahan belum disimpan pada langkah Simpan." : ""}
             </p>
           </div>
         </div>
         <nav className="nav langkah-nav" aria-label="Langkah pengisian rapor">
           {LANGKAH.map((item, urutan) => {
-            const selesai = langkahSelesai(item.id, berkas);
-            const terkunci = !langkahTerbuka(item.id, berkas);
+            const selesai = langkahSelesai(item.id, berkas, tersimpanDiArsip);
+            const terkunci = !langkahTerbuka(item.id, berkas, tersimpanDiArsip);
             return (
               <button
                 key={item.id}
@@ -198,16 +237,9 @@ export function App() {
         {langkah && aktif !== "bantuan" && (
           <section className="pengantar jangan-cetak">
             <p className="kicker">Langkah {indeksAktif + 1} dari {LANGKAH.length}</p>
-            <h2>{aktif === "berkas" && berkas ? "Periksa identitas semester ini" : LANGKAH[indeksAktif].judul}</h2>
+            <h2>{judulLangkah(aktif, berkas, draf !== null || arsip.length > 0)}</h2>
             <ol>
-              {(aktif === "berkas" && berkas
-                ? [
-                    "Periksa identitas, tahun ajaran, dan tanggal rapor.",
-                    "Klik Perbarui identitas bila ada yang diubah.",
-                    "Klik Simpan berkas supaya salinan .erapor.json di komputer ikut berubah.",
-                  ]
-                : LANGKAH[indeksAktif].urut
-              ).map((kalimat) => (
+              {isiLangkah(aktif, berkas, draf !== null || arsip.length > 0).map((kalimat) => (
                 <li key={kalimat}>{kalimat}</li>
               ))}
             </ol>
@@ -220,20 +252,23 @@ export function App() {
         {aktif === "nilai" && <NilaiView />}
         {aktif === "kelengkapan" && <KelengkapanView />}
         {aktif === "cetak" && <CetakView />}
+        {aktif === "simpan" && <SimpanView />}
         {aktif === "bantuan" && <BantuanView />}
         {aktif !== "bantuan" && (
           <div className="jejak jangan-cetak">
             <button className="tombol kedua" type="button" onClick={() => bukaLangkah(LANGKAH[Math.max(0, indeksAktif - 1)].id)} disabled={indeksAktif <= 0}>
               Kembali
             </button>
-            <button
-              className="tombol"
-              type="button"
-              onClick={() => bukaLangkah(LANGKAH[Math.min(LANGKAH.length - 1, indeksAktif + 1)].id)}
-              disabled={indeksAktif >= LANGKAH.length - 1 || !langkahSelesai(LANGKAH[indeksAktif].id, berkas)}
-            >
-              Lanjut ke {LANGKAH[Math.min(LANGKAH.length - 1, indeksAktif + 1)].label}
-            </button>
+            {indeksAktif < LANGKAH.length - 1 && (
+              <button
+                className="tombol"
+                type="button"
+                onClick={() => bukaLangkah(LANGKAH[indeksAktif + 1].id)}
+                disabled={!langkahSelesai(LANGKAH[indeksAktif].id, berkas, tersimpanDiArsip)}
+              >
+                Lanjut ke {LANGKAH[indeksAktif + 1].label}
+              </button>
+            )}
           </div>
         )}
       </main>
