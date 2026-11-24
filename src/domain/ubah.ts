@@ -106,6 +106,7 @@ function mapelDariTemplat(
     berlakuUntuk,
     opsiHitung: "rata-rata",
     progresif: false,
+    ambang: null,
     bawaan: true,
   };
 }
@@ -224,6 +225,7 @@ function selaraskanAgama(berkas: Berkas, muridId: string): void {
       berlakuUntuk: "per-murid",
       opsiHitung: "rata-rata",
       progresif: false,
+      ambang: null,
       bawaan: true,
     };
     berkas.mapel.push(mapel);
@@ -254,6 +256,7 @@ export function tambahMapel(
     berlakuUntuk: input.berlakuUntuk,
     opsiHitung: "rata-rata",
     progresif: false,
+    ambang: null,
     bawaan: false,
   });
   return berikutnya;
@@ -262,7 +265,7 @@ export function tambahMapel(
 export function ubahMapel(
   berkas: Berkas,
   mapelId: string,
-  perubahan: Partial<Pick<Mapel, "nama" | "aktif" | "opsiHitung" | "progresif" | "kelompok" | "berlakuUntuk">>,
+  perubahan: Partial<Pick<Mapel, "nama" | "aktif" | "opsiHitung" | "progresif" | "ambang" | "kelompok" | "berlakuUntuk">>,
 ): Berkas {
   const berikutnya = salin(berkas);
   const mapel = berikutnya.mapel.find((item) => item.id === mapelId);

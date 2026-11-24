@@ -111,12 +111,12 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
                     <option value="asesmen">Asesmen penuh, dari tujuan pembelajaran</option>
                   </select>
                 </Bidang>
-                <Bidang label="Ambang ketercapaian" id="ambang">
+                <Bidang label="Ambang untuk semua mapel" id="ambang">
                   <input
                     id="ambang"
                     inputMode="decimal"
                     value={rombel.ambang ?? ""}
-                    placeholder="Diisi sekolah, misalnya 75"
+                    placeholder="Misalnya 75"
                     onChange={(event) => {
                       const teks = event.target.value.replace(",", ".");
                       ubah((saatIni) => ubahRombel(saatIni, rombel.id, { ambang: teks === "" ? null : Number(teks) }));
@@ -135,6 +135,11 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
                   Rapor Fase A tanpa angka, hanya deskripsi capaian
                 </label>
               )}
+              <div className="penjelasan">
+                <p><strong>Ambang ketercapaian.</strong> Batas tuntas ini ditetapkan sekolah, sering disebut KKM, bukan angka baku nasional. Angka di atas dipakai semua mapel. Isi kolom Ambang pada satu mapel bila KKM-nya berbeda, misalnya Matematika 75 dan PJOK 70. Kolom yang kosong ikut angka rombel.</p>
+                <p><strong>Cara hitung.</strong> Pilihan tiap mapel diikuti tab Nilai. Rata-rata tidak menampilkan bobot. Pembobotan menampilkan bobot, dan jumlahnya harus 100%. Persentase menghitung bagian nilai yang mencapai ambang, juga tanpa bobot.</p>
+                <p><strong>Nilai terakhir.</strong> Centang bila tujuan pembelajaran berurutan dan saling menjadi syarat. Contohnya, mengukur panjang baru dinilai setelah murid bisa memakai satuan. Nilai rapor lalu memakai angka tujuan terakhir yang terisi, bukan rata-rata semuanya. Kosongkan bila tiap tujuan berdiri sendiri.</p>
+              </div>
               <p className="senyap">
                 {rombel.mode === "semester"
                   ? "Rapor semester memakai beberapa nilai sumatif. Deskripsi diketik wali kelas pada langkah Nilai."
@@ -262,12 +267,12 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
           {bagian === "mapel" && (
             <>
               <h3>Mata pelajaran yang dipakai</h3>
-              <p className="senyap">Centang Pakai pada mapel yang diajarkan. Cara hitung boleh berbeda tiap mapel: rata-rata, pembobotan, atau persentase yang mencapai ambang. Centang prasyarat berurutan bila nilai akhir cukup memakai tujuan terakhir.</p>
-              <DaftarMapel mapel={aktif} ubah={ubah} />
+              <p className="senyap">Centang Pakai pada mapel yang diajarkan. Cara hitung dan ambang pada baris ini yang dipakai tab Nilai.</p>
+              <DaftarMapel mapel={aktif} rombel={rombel} ubah={ubah} />
               {dorman.length > 0 && (
                 <details>
                   <summary>Mata pelajaran yang belum diaktifkan ({dorman.length})</summary>
-                  <DaftarMapel mapel={dorman} ubah={ubah} />
+                  <DaftarMapel mapel={dorman} rombel={rombel} ubah={ubah} />
                 </details>
               )}
               <form
@@ -327,9 +332,11 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
 
 function DaftarMapel({
   mapel,
+  rombel,
   ubah,
 }: {
   mapel: Mapel[];
+  rombel: { ambang: number | null };
   ubah: ReturnType<typeof useBerkas>["ubah"];
 }) {
   return (
@@ -340,7 +347,8 @@ function DaftarMapel({
             <th>Pakai</th>
             <th>Mata pelajaran</th>
             <th>Cara hitung</th>
-            <th>Prasyarat berurutan</th>
+            <th>Ambang mapel</th>
+            <th>Nilai terakhir</th>
             <th />
           </tr>
         </thead>
@@ -359,11 +367,28 @@ function DaftarMapel({
                 <input aria-label={`Nama ${item.nama}`} value={item.nama} onChange={(event) => ubah((saatIni) => ubahMapel(saatIni, item.id, { nama: event.target.value }))} />
               </td>
               <td>
-                <select aria-label={`Cara hitung ${item.nama}`} value={item.opsiHitung} onChange={(event) => ubah((saatIni) => ubahMapel(saatIni, item.id, { opsiHitung: event.target.value as OpsiHitung }))}>
+                <select
+                  aria-label={`Cara hitung ${item.nama}`}
+                  value={item.opsiHitung}
+                  disabled={item.progresif}
+                  onChange={(event) => ubah((saatIni) => ubahMapel(saatIni, item.id, { opsiHitung: event.target.value as OpsiHitung }))}
+                >
                   <option value="rata-rata">Rata-rata</option>
                   <option value="pembobotan">Pembobotan</option>
                   <option value="persentase">Persentase ketercapaian</option>
                 </select>
+              </td>
+              <td className="kolom-angka">
+                <input
+                  aria-label={`Ambang ${item.nama}`}
+                  inputMode="decimal"
+                  placeholder={rombel.ambang === null ? "Ikut rombel" : `Ikut ${rombel.ambang}`}
+                  value={item.ambang ?? ""}
+                  onChange={(event) => {
+                    const teks = event.target.value.replace(",", ".").trim();
+                    ubah((saatIni) => ubahMapel(saatIni, item.id, { ambang: teks === "" ? null : Number(teks) }));
+                  }}
+                />
               </td>
               <td>
                 <input

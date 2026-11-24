@@ -53,6 +53,7 @@ export interface Mapel {
   berlakuUntuk: "semua" | "per-murid";
   opsiHitung: OpsiHitung;
   progresif: boolean;
+  ambang: number | null;
   bawaan: boolean;
 }
 

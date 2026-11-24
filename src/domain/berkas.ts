@@ -33,7 +33,10 @@ export function normalkan(data: unknown): { berkas: Berkas } | { error: string }
     tanggalRapor: String(mentah.tanggalRapor ?? ""),
     rombel: array(mentah.rombel),
     murid: array(mentah.murid),
-    mapel: array(mentah.mapel),
+    mapel: array(mentah.mapel).map((item) => ({
+      ...item,
+      ambang: typeof item.ambang === "number" && !Number.isNaN(item.ambang) ? item.ambang : null,
+    })),
     pilihan: array(mentah.pilihan),
     sumatif: array(mentah.sumatif),
     tujuan: array(mentah.tujuan),

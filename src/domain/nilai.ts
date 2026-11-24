@@ -70,7 +70,7 @@ export function hitungNilaiAkhir(
   }
 
   if (ambang === null || Number.isNaN(ambang)) {
-    return { nilai: null, pesan: "Isi ambang ketercapaian pada rombel ini." };
+    return { nilai: null, pesan: "Isi ambang ketercapaian. Angka rombel berlaku untuk semua mapel, atau isi ambang mapel bila KKM-nya berbeda." };
   }
   const tuntas = ada.filter((item) => item.nilai! >= ambang).length;
   const pesan = ada.length === butir.length ? null : "Dihitung dari nilai yang sudah terisi.";

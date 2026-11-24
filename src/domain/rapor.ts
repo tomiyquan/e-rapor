@@ -50,8 +50,27 @@ export function butirMurid(berkas: Berkas, rombel: Rombel, mapel: Mapel, muridId
     }));
 }
 
+export function ambangBerlaku(mapel: Mapel, rombel: Rombel): number | null {
+  return typeof mapel.ambang === "number" && !Number.isNaN(mapel.ambang) ? mapel.ambang : rombel.ambang;
+}
+
+export function teksCaraHitung(mapel: Mapel, rombel: Rombel): string {
+  if (mapel.progresif) {
+    return "Nilai terakhir sedang dipakai. Nilai akhir adalah angka kegiatan terakhir yang terisi, karena tujuan sebelumnya menjadi prasyarat. Bobot tidak ditampilkan.";
+  }
+  if (mapel.opsiHitung === "rata-rata") {
+    return "Cara hitung rata-rata, mengikuti langkah Mapel. Nilai akhir adalah rata-rata nilai yang terisi. Kolom bobot tidak dipakai.";
+  }
+  if (mapel.opsiHitung === "pembobotan") {
+    return "Cara hitung pembobotan, mengikuti langkah Mapel. Isi bobot tiap kegiatan. Jumlah bobot harus 100%.";
+  }
+  const ambang = ambangBerlaku(mapel, rombel);
+  const sumber = typeof mapel.ambang === "number" ? `ambang mapel ini ${ambang}` : ambang === null ? "ambang belum diisi" : `ambang rombel ${ambang}, karena mapel ini tidak diisi sendiri`;
+  return `Cara hitung persentase ketercapaian. Nilai akhir adalah persentase kegiatan yang mencapai ${sumber}. Bobot tidak dipakai.`;
+}
+
 export function hasilMapel(berkas: Berkas, rombel: Rombel, mapel: Mapel, muridId: string): HasilHitung {
-  return hitungNilaiAkhir(mapel.opsiHitung, butirMurid(berkas, rombel, mapel, muridId), rombel.ambang, mapel.progresif);
+  return hitungNilaiAkhir(mapel.opsiHitung, butirMurid(berkas, rombel, mapel, muridId), ambangBerlaku(mapel, rombel), mapel.progresif);
 }
 
 export function butirDeskripsi(berkas: Berkas, rombel: Rombel, mapel: Mapel, muridId: string): ButirDeskripsi[] {
@@ -68,7 +87,7 @@ export function butirDeskripsi(berkas: Berkas, rombel: Rombel, mapel: Mapel, mur
 }
 
 export function susunDraf(berkas: Berkas, rombel: Rombel, mapel: Mapel, muridId: string): string {
-  return drafDeskripsi(butirDeskripsi(berkas, rombel, mapel, muridId), rombel.ambang);
+  return drafDeskripsi(butirDeskripsi(berkas, rombel, mapel, muridId), ambangBerlaku(mapel, rombel));
 }
 
 export function barisRapor(berkas: Berkas, rombel: Rombel, murid: Murid): BarisRapor[] {

@@ -4,8 +4,9 @@ import { normalkan } from "./berkas";
 import { drafDeskripsi, drafKokurikuler } from "./deskripsi";
 import { bacaLembar, buatLembar } from "./lembar";
 import { hitungNilaiAkhir } from "./nilai";
+import { ambangBerlaku, hasilMapel, teksCaraHitung } from "./rapor";
 import { templatMapel } from "./kurikulum";
-import { buatBerkas, tambahMurid, tambahRombel, tambahSumatif } from "./ubah";
+import { buatBerkas, setNilaiSumatif, tambahMurid, tambahRombel, tambahSumatif, ubahMapel, ubahRombel } from "./ubah";
 import type { Berkas } from "./types";
 
 const edo = [
@@ -58,6 +59,32 @@ describe("hitungNilaiAkhir", () => {
 
   it("memakai nilai tujuan terakhir bila materi bersifat prasyarat", () => {
     expect(hitungNilaiAkhir("rata-rata", edo, null, true).nilai).toBe(84);
+  });
+
+  it("memakai ambang mapel bila diisi, dan ambang rombel bila kosong", () => {
+    let berkas = sekolahDasar();
+    const rombelAwal = berkas.rombel[0];
+    berkas = ubahRombel(berkas, rombelAwal.id, { ambang: 75 });
+    const matematika = berkas.mapel.find((item) => item.kode === "matematika")!;
+    const rombel = berkas.rombel[0];
+    expect(ambangBerlaku(matematika, rombel)).toBe(75);
+    berkas = ubahMapel(berkas, matematika.id, { ambang: 84, opsiHitung: "persentase" });
+    const mapel = berkas.mapel.find((item) => item.id === matematika.id)!;
+    expect(ambangBerlaku(mapel, berkas.rombel[0])).toBe(84);
+    expect(teksCaraHitung(mapel, berkas.rombel[0])).toMatch(/ambang mapel ini 84/);
+    expect(teksCaraHitung({ ...mapel, ambang: null, opsiHitung: "rata-rata", progresif: false }, berkas.rombel[0])).toMatch(/Kolom bobot tidak dipakai/);
+
+    const skor = [85, 83, 60, 84];
+    const murid = berkas.murid.find((item) => item.nama === "Edo")!;
+    for (const nilai of skor) {
+      berkas = tambahSumatif(berkas, mapel.id, `Butir ${nilai}`);
+      const butir = berkas.sumatif.filter((item) => item.mapelId === mapel.id).at(-1)!;
+      berkas = setNilaiSumatif(berkas, murid.id, butir.id, nilai);
+    }
+    expect(hasilMapel(berkas, berkas.rombel[0], berkas.mapel.find((item) => item.id === mapel.id)!, murid.id)).toEqual({
+      nilai: 50,
+      pesan: null,
+    });
   });
 
   it("kosong bila belum ada angka", () => {

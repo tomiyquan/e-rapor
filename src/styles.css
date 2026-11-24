@@ -202,6 +202,9 @@ textarea { resize: vertical; }
   border-bottom: 1px solid var(--garis);
 }
 .senyap { color: var(--lembut); font-weight: 400; }
+.penjelasan { margin: 0 0 12px; padding: 10px 12px; background: #f6f8fb; border: 1px solid var(--garis); border-radius: 4px; }
+.penjelasan p { margin: 0 0 8px; }
+.penjelasan p:last-child { margin-bottom: 0; }
 .tabel-bungkus { overflow-x: auto; margin-top: 8px; border: 1px solid var(--garis); border-radius: 4px; }
 table.tabel { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .tabel th, .tabel td { border-bottom: 1px solid var(--garis); padding: 8px 10px; text-align: left; vertical-align: middle; }
@@ -209,6 +212,8 @@ table.tabel { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .tabel th { color: #3e5164; font-weight: 650; background: #f6f8fb; font-size: 0.8rem; }
 .tabel .kolom-nama { min-width: 11rem; }
 .tabel select { min-width: 9.25rem; }
+.tabel .kolom-angka { width: 7.5rem; }
+.tabel .kolom-angka input { min-width: 5.5rem; width: 6.5rem; }
 .tabel .kolom-aksi { width: 1%; white-space: nowrap; text-align: right; }
 .daftar-rombel { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
 .daftar-rombel button { border: 1px solid var(--garis); background: white; border-radius: 4px; height: 34px; padding: 0 12px; }

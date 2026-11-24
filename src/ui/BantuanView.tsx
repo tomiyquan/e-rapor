@@ -7,14 +7,14 @@ export function BantuanView() {
         <li><strong>Sekolah.</strong> Isi identitas satuan pendidikan dan semester, atau buka berkas <strong>.erapor.json</strong> yang sudah ada. Simpan berkas itu ke komputer atau flashdisk.</li>
         <li><strong>Rombel.</strong> Buat kelas, nama rombel, dan wali kelas.</li>
         <li><strong>Murid.</strong> Daftarkan siswa pada rombel itu. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
-        <li><strong>Mapel.</strong> Pilih rapor semester atau asesmen penuh, isi ambang ketercapaian sekolah, lalu centang mapel yang diajarkan. Mapel pilihan SMA, kejuruan SMK, dan Bahasa Inggris SD/MI diaktifkan hanya bila memang dipakai.</li>
+        <li><strong>Mapel.</strong> Pilih rapor semester atau asesmen penuh. Ambang rombel berlaku untuk semua mapel; isi ambang pada baris mapel bila KKM-nya berbeda. Cara hitung tiap mapel diikuti tab Nilai. Centang Nilai terakhir bila tujuan berurutan dan saling menjadi syarat.</li>
         <li><strong>Nilai.</strong> Unduh format isian per mata pelajaran untuk guru mapel, lalu impor kembali atau ketik nilainya. Sunting deskripsi sebelum dicetak.</li>
         <li><strong>Kelengkapan.</strong> Isi ketidakhadiran, narasi kokurikuler, ekstrakurikuler, dan catatan wali kelas. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>
         <li><strong>Cetak.</strong> Periksa rapor dan leger, lalu simpan berkas sekolah lagi.</li>
       </ol>
       <h2>Yang dihitung</h2>
       <p>
-        Nilai akhir hanya berasal dari asesmen sumatif. Asesmen formatif tidak digabung dan tidak menjadi pembagi. Tiga cara hitung dapat dipilih: rata-rata, pembobotan yang membulatkan tiap komponen, atau persentase tujuan yang mencapai ambang sekolah. Bila tujuan pembelajaran bersifat prasyarat berurutan, nilai akhir dapat memakai tujuan terakhir.
+        Nilai akhir hanya berasal dari asesmen sumatif. Asesmen formatif tidak digabung dan tidak menjadi pembagi. Tiap mapel punya cara hitung sendiri. Rata-rata tidak memakai bobot. Pembobotan menampilkan bobot yang jumlahnya 100% dan tiap komponen dibulatkan. Persentase menghitung bagian nilai yang mencapai ambang mapel, atau ambang rombel bila mapel tidak diisi sendiri. Nilai terakhir dipakai bila tujuan berurutan: angka rapor adalah tujuan terakhir yang terisi.
       </p>
       <p>
         Deskripsi menyebut kompetensi yang sudah dikuasai dan yang masih perlu pendampingan, dengan kalimat yang dapat diedit sebelum dicetak. Kokurikuler berupa satu narasi dimensi profil lulusan, bukan angka. Rapor tidak memuat peringkat.

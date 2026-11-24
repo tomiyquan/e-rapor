@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { butirLembar, bacaLembar, buatLembar, unduhBerkas } from "../domain/lembar";
-import { hasilMapel, mengikuti, mapelRombel, muridRombel, namaRombel, susunDraf } from "../domain/rapor";
+import { hasilMapel, mengikuti, mapelRombel, muridRombel, namaRombel, susunDraf, teksCaraHitung } from "../domain/rapor";
 import type { Mapel, SkalaKualitatif } from "../domain/types";
 import { LABEL_SKALA } from "../domain/types";
 import {
@@ -100,6 +100,7 @@ export function NilaiView() {
       </div>
       {galat.length > 0 && <Pesan jenis="galat" anak={galat.join(" ")} />}
       {info && <Pesan jenis="baik" anak={info} />}
+      {mapel && <p className="senyap">{teksCaraHitung(mapel, rombel)} Pilihan ini diubah di langkah Mapel.</p>}
       {mapel && rombel.mode === "semester" && <EditorSumatif mapel={mapel} />}
       {mapel && rombel.mode === "asesmen" && <EditorTujuan mapel={mapel} />}
       {mapel && (
@@ -193,13 +194,15 @@ function EditorSumatif({ mapel }: { mapel: Mapel }) {
       {daftar.map((item) => (
         <div className="baris-data" key={item.id}>
           <input aria-label={`Nama ${item.nama}`} value={item.nama} onChange={(event) => ubah((saatIni) => ubahSumatif(saatIni, item.id, { nama: event.target.value }))} />
-          <input
-            aria-label={`Bobot ${item.nama}`}
-            inputMode="decimal"
-            placeholder="Bobot %"
-            value={item.bobot ?? ""}
-            onChange={(event) => ubah((saatIni) => ubahSumatif(saatIni, item.id, { bobot: angkaAtauKosong(event.target.value) }))}
-          />
+          {tampilkanBobot(mapel) && (
+            <input
+              aria-label={`Bobot ${item.nama}`}
+              inputMode="decimal"
+              placeholder="Bobot %"
+              value={item.bobot ?? ""}
+              onChange={(event) => ubah((saatIni) => ubahSumatif(saatIni, item.id, { bobot: angkaAtauKosong(event.target.value) }))}
+            />
+          )}
           <label className="centang">
             <input type="checkbox" checked={item.akhirSemester} onChange={(event) => ubah((saatIni) => ubahSumatif(saatIni, item.id, { akhirSemester: event.target.checked }))} />
             Akhir semester
@@ -223,17 +226,19 @@ function EditorTujuan({ mapel }: { mapel: Mapel }) {
   return (
     <div>
       <h3>Tujuan pembelajaran</h3>
-      <p className="senyap">Tulis tujuan yang benar-benar diajarkan. Bila tujuan bersifat prasyarat berurutan, centang kolom itu pada langkah Mapel agar nilai akhir memakai tujuan terakhir.</p>
+      <p className="senyap">Tulis tujuan yang benar-benar diajarkan, dari yang paling awal ke yang paling akhir. Urutan ini dipakai bila kolom Nilai terakhir dicentang.</p>
       {daftar.map((item) => (
         <div className="baris-data" key={item.id}>
           <input aria-label={`Tujuan ${item.nama}`} value={item.nama} onChange={(event) => ubah((saatIni) => ubahTujuan(saatIni, item.id, { nama: event.target.value }))} />
-          <input
-            aria-label={`Bobot ${item.nama}`}
-            inputMode="decimal"
-            placeholder="Bobot %"
-            value={item.bobot ?? ""}
-            onChange={(event) => ubah((saatIni) => ubahTujuan(saatIni, item.id, { bobot: angkaAtauKosong(event.target.value) }))}
-          />
+          {tampilkanBobot(mapel) && (
+            <input
+              aria-label={`Bobot ${item.nama}`}
+              inputMode="decimal"
+              placeholder="Bobot %"
+              value={item.bobot ?? ""}
+              onChange={(event) => ubah((saatIni) => ubahTujuan(saatIni, item.id, { bobot: angkaAtauKosong(event.target.value) }))}
+            />
+          )}
           <button className="tombol bahaya" type="button" onClick={() => ubah((saatIni) => hapusTujuan(saatIni, item.id))}>Hapus</button>
         </div>
       ))}
@@ -254,6 +259,10 @@ function NilaiSel({ label, nilai, onChange }: { label: string; nilai: number | n
       onChange={(event) => onChange(angkaAtauKosong(event.target.value))}
     />
   );
+}
+
+function tampilkanBobot(mapel: Mapel): boolean {
+  return mapel.opsiHitung === "pembobotan" && !mapel.progresif;
 }
 
 function angkaAtauKosong(teks: string): number | null {

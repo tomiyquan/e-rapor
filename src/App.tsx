@@ -64,8 +64,9 @@ const LANGKAH: Langkah[] = [
     judul: "Pilih cara nilai dan mata pelajaran",
     urut: [
       "Pilih rapor semester atau asesmen penuh. Pilihan ini berlaku untuk rombel yang sedang dibuka.",
-      "Isi ambang ketercapaian bila sekolah sudah menetapkannya. Angka ini bukan baku nasional.",
-      "Centang mata pelajaran yang diajarkan. Mapel pilihan, kejuruan, dan Bahasa Inggris SD/MI tidak dipaksa aktif.",
+      "Isi ambang rombel bila sekolah sudah menetapkannya. Angka itu dipakai semua mapel. Isi kolom Ambang pada satu mapel bila KKM-nya berbeda.",
+      "Pilih cara hitung tiap mapel. Tab Nilai mengikuti pilihan itu: bobot hanya muncul pada pembobotan.",
+      "Centang Nilai terakhir bila tujuan berurutan dan saling menjadi syarat. Nilai rapor lalu memakai tujuan terakhir yang terisi.",
     ],
   },
   {
