@@ -24,7 +24,7 @@ Perintah `npm run build` menulis ulang `e-rapor.html`.
 
 ## Cara memakai
 
-Delapan langkah di bilah atas dikunci berurutan. Langkah berikutnya baru terbuka setelah langkah yang sedang dikerjakan terisi. Langkah yang sudah lewat tetap bisa dibuka.
+Delapan langkah di bilah atas dikunci berurutan. Langkah berikutnya baru terbuka setelah langkah yang sedang dikerjakan terisi. Langkah yang sudah lewat tetap bisa dibuka. Tiap langkah punya tombol **Lihat panduan** di kanan judul. Video diputar langsung di halaman.
 
 1. **Sekolah.** Pemakaian pertama: isi identitas satuan pendidikan dan semester, lalu klik Buat berkas sekolah. Bila komputer ini sudah menyimpan rapor, pilih rapor pada daftar atau buat rapor semester baru. Berkas `.erapor.json` dari komputer lain tetap bisa dibuka.
 2. **Rombel.** Klik Tambah rombel. Isi kelas, nama rombel, dan wali kelas pada jendela. Daftar rombel tampil sebagai tabel.
@@ -37,7 +37,19 @@ Delapan langkah di bilah atas dikunci berurutan. Langkah berikutnya baru terbuka
 
 ## Video tutorial
 
-Rekaman langkah ada di folder `demo` pada repositori ini:
+Rekaman langkah ada di folder `demo` pada repositori ini. Tombol Lihat panduan memutar video langkah yang sedang dibuka:
+
+- `demo/panduan-sekolah.mp4`, identitas sekolah
+- `demo/panduan-rombel.mp4`, rombel
+- `demo/panduan-murid.mp4`, murid
+- `demo/panduan-mapel.mp4`, mata pelajaran
+- `demo/panduan-nilai.mp4`, nilai
+- `demo/panduan-kelengkapan.mp4`, kelengkapan
+- `demo/panduan-cetak.mp4`, cetak
+- `demo/panduan-simpan.mp4`, simpan rapor
+- `demo/panduan-bantuan.mp4`, seluruh langkah
+
+Rekaman sebelumnya tetap ada:
 
 - `demo/langkah-e-rapor.mp4`, alur pengisian dari awal
 - `demo/tata-letak-formulir.mp4`, tata letak formulir

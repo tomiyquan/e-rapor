@@ -1,8 +1,13 @@
+import { TombolPanduan } from "./Panduan";
+
 export function BantuanView() {
   return (
     <section className="kartu">
-      <h2>Cara memakai</h2>
-      <p>Buka <strong>e-rapor.html</strong> dengan Chrome, Edge, atau Firefox. Tidak perlu memasang XAMPP atau server. Bilah di atas halaman adalah urutan kerja wali kelas. Langkah berikutnya baru bisa dibuka setelah langkah yang sedang dikerjakan terisi.</p>
+      <div className="baris-judul">
+        <h2>Cara memakai</h2>
+        <TombolPanduan src="demo/panduan-bantuan.mp4" judul="keseluruhan" />
+      </div>
+      <p>Buka <strong>e-rapor.html</strong> dengan Chrome, Edge, atau Firefox. Tidak perlu memasang XAMPP atau server. Bilah di atas halaman adalah urutan kerja wali kelas. Langkah berikutnya baru bisa dibuka setelah langkah yang sedang dikerjakan terisi. Tombol <strong>Lihat panduan</strong> di kanan judul memutar video langkah itu langsung di halaman.</p>
       <ol>
         <li><strong>Sekolah.</strong> Pemakaian pertama: isi identitas satuan pendidikan dan semester. Bila komputer ini sudah menyimpan rapor, pilih rapor pada daftar atau buat rapor semester baru. Berkas <strong>.erapor.json</strong> dari komputer lain tetap bisa dibuka.</li>
         <li><strong>Rombel.</strong> Klik Tambah rombel. Isi kelas, nama rombel, dan wali kelas pada jendela. Daftar rombel tampil sebagai tabel.</li>

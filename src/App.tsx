@@ -6,6 +6,7 @@ import { BerkasView } from "./ui/BerkasView";
 import { CetakView } from "./ui/CetakView";
 import { KelengkapanView } from "./ui/KelengkapanView";
 import { NilaiView } from "./ui/NilaiView";
+import { TombolPanduan } from "./ui/Panduan";
 import { RombelView } from "./ui/RombelView";
 import { SimpanView } from "./ui/SimpanView";
 
@@ -18,6 +19,7 @@ interface Langkah {
   ringkas: string;
   judul: string;
   urut: string[];
+  panduan: string;
 }
 
 const LANGKAH: Langkah[] = [
@@ -27,6 +29,7 @@ const LANGKAH: Langkah[] = [
     label: "Sekolah",
     ringkas: "Identitas",
     judul: "Mulai dari identitas sekolah",
+    panduan: "demo/panduan-sekolah.mp4",
     urut: [
       "Isi nama satuan pendidikan, jenjang, dan semester pada formulir.",
       "Klik Buat berkas sekolah. Satu berkas menyimpan satu semester.",
@@ -39,6 +42,7 @@ const LANGKAH: Langkah[] = [
     label: "Rombel",
     ringkas: "Kelas",
     judul: "Buat rombel",
+    panduan: "demo/panduan-rombel.mp4",
     urut: [
       "Klik Tambah rombel, lalu isi kelas, nama rombel, dan wali kelas pada jendela.",
       "Daftar rombel tampil sebagai tabel. Wali kelas bisa diubah langsung pada barisnya.",
@@ -51,6 +55,7 @@ const LANGKAH: Langkah[] = [
     label: "Murid",
     ringkas: "Siswa",
     judul: "Daftarkan murid pada rombel",
+    panduan: "demo/panduan-murid.mp4",
     urut: [
       "Pilih rombel yang sudah dibuat.",
       "Klik Tambah murid. Isi nama, NISN, dan agama pada jendela, lalu simpan. Agama menentukan mata pelajaran agama di rapor.",
@@ -63,6 +68,7 @@ const LANGKAH: Langkah[] = [
     label: "Mapel",
     ringkas: "Cara nilai",
     judul: "Pilih cara nilai dan mata pelajaran",
+    panduan: "demo/panduan-mapel.mp4",
     urut: [
       "Pilih rapor semester atau asesmen penuh. Pilihan ini berlaku untuk rombel yang sedang dibuka.",
       "Isi ambang rombel. Angka itu dipakai semua mapel, dan langkah Nilai terbuka setelah ambang terisi. Isi kolom Ambang pada satu mapel bila KKM-nya berbeda.",
@@ -76,6 +82,7 @@ const LANGKAH: Langkah[] = [
     label: "Nilai",
     ringkas: "Isian guru",
     judul: "Masukkan nilai dari guru mapel",
+    panduan: "demo/panduan-nilai.mp4",
     urut: [
       "Ikuti nomor pada halaman: pilih mapel, susun kegiatan, lalu isi nilai.",
       "Capaian kompetensi terisi sendiri setelah ada angka. Sunting kalimat bila perlu.",
@@ -88,6 +95,7 @@ const LANGKAH: Langkah[] = [
     label: "Kelengkapan",
     ringkas: "Selain nilai",
     judul: "Lengkapi bagian rapor di luar nilai",
+    panduan: "demo/panduan-kelengkapan.mp4",
     urut: [
       "Pilih rombel, lalu pilih nama murid pada daftar.",
       "Isi ketidakhadiran. Centang dimensi kokurikuler dan susun narasinya. Kotak narasi memuat contoh.",
@@ -100,6 +108,7 @@ const LANGKAH: Langkah[] = [
     label: "Cetak",
     ringkas: "Rapor",
     judul: "Periksa kelengkapan, lalu cetak",
+    panduan: "demo/panduan-cetak.mp4",
     urut: [
       "Baca daftar murid. Mapel tanpa deskripsi dan kokurikuler yang kosong disebut di sana.",
       "Pilih murid untuk melihat rapor sebelum dicetak.",
@@ -112,6 +121,7 @@ const LANGKAH: Langkah[] = [
     label: "Simpan",
     ringkas: "Arsip",
     judul: "Simpan rapor di komputer ini",
+    panduan: "demo/panduan-simpan.mp4",
     urut: [
       "Klik Simpan rapor. Semester ini masuk ke daftar pada tab Sekolah.",
       "Berkas .erapor.json ikut terunduh sebagai cadangan untuk komputer lain.",
@@ -237,7 +247,10 @@ export function App() {
         {langkah && aktif !== "bantuan" && (
           <section className="pengantar jangan-cetak">
             <p className="kicker">Langkah {indeksAktif + 1} dari {LANGKAH.length}</p>
-            <h2>{judulLangkah(aktif, berkas, draf !== null || arsip.length > 0)}</h2>
+            <div className="baris-judul">
+              <h2>{judulLangkah(aktif, berkas, draf !== null || arsip.length > 0)}</h2>
+              <TombolPanduan src={LANGKAH[indeksAktif].panduan} judul={LANGKAH[indeksAktif].label} />
+            </div>
             <ol>
               {isiLangkah(aktif, berkas, draf !== null || arsip.length > 0).map((kalimat) => (
                 <li key={kalimat}>{kalimat}</li>
