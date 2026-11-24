@@ -25,25 +25,69 @@ p { line-height: 1.5; }
 .aplikasi { min-height: 100vh; }
 .kepala {
   display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: flex-end;
+  flex-direction: column;
+  gap: 12px;
   padding: 18px 28px 0;
   background: var(--hijau);
   color: #f6f1e7;
 }
-.merek { display: flex; flex-direction: column; gap: 2px; padding-bottom: 12px; }
+.baris-merek { display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; }
+.sisi-kepala { text-align: right; }
+.merek { display: flex; flex-direction: column; gap: 2px; }
 .merek strong { font-family: Palatino, Georgia, serif; font-size: 1.45rem; letter-spacing: 0.01em; white-space: nowrap; }
 .merek span, .status-simpan { color: #d7ebe4; font-size: 0.92rem; }
-.nav { display: flex; gap: 4px; flex-wrap: wrap; }
-.nav button {
+.status-simpan { margin: 4px 0 0; }
+.tautan-bantuan {
+  border: 1px solid #d7ebe4;
+  background: transparent;
+  color: #f6f1e7;
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+.tautan-bantuan.aktif { background: var(--kertas); color: var(--hijau); border-color: var(--kertas); }
+.nav { display: flex; gap: 4px; }
+.langkah-nav { overflow-x: auto; padding-bottom: 0; }
+.langkah-nav button {
+  flex: 1 0 8.5rem;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  text-align: left;
   border: 0;
   background: transparent;
   color: #e7f3ef;
-  padding: 10px 14px;
-  border-radius: 10px 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 12px 12px 0 0;
 }
-.nav button.aktif { background: var(--kertas); color: var(--hijau); }
+.langkah-nav button:disabled { opacity: 0.45; cursor: not-allowed; }
+.langkah-nav button .nomor {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  flex: none;
+  font-size: 0.85rem;
+}
+.langkah-nav button .nama-langkah { display: flex; flex-direction: column; line-height: 1.2; }
+.langkah-nav button small { color: #d7ebe4; font-size: 0.75rem; }
+.langkah-nav button.aktif { background: var(--kertas); color: var(--hijau); }
+.langkah-nav button.aktif small { color: var(--lembut); }
+.langkah-nav button.selesai .nomor { background: #d7ebe4; color: var(--hijau); border-color: transparent; }
+.pengantar {
+  background: white;
+  border: 1px solid var(--garis);
+  border-left: 6px solid var(--hijau);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.pengantar h2 { margin: 0 0 8px; }
+.kicker { margin: 0 0 4px; color: var(--hijau); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.78rem; }
+.pengantar ol { margin: 0; padding-left: 1.2rem; }
+.pengantar li { margin: 4px 0; }
+.jejak { display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; }
 .isi { padding: 22px 28px 48px; max-width: 1180px; }
 .kartu {
   background: var(--kartu);
@@ -83,6 +127,7 @@ textarea { min-height: 88px; resize: vertical; }
 table.tabel { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 .tabel th, .tabel td { border-bottom: 1px solid var(--garis); padding: 8px; text-align: left; vertical-align: top; }
 .tabel input, .tabel select { width: 100%; min-width: 7rem; }
+.tabel select { min-width: 11rem; }
 .tabel .kolom-nama input { min-width: 22rem; }
 .tabel th { color: var(--lembut); font-weight: 600; }
 .daftar-rombel { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
@@ -135,9 +180,15 @@ table.tabel { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 .leger-kertas { page: leger; }
 
 @media (max-width: 800px) {
-  .kepala { flex-direction: column; align-items: stretch; }
+  .baris-merek, .sisi-kepala { text-align: left; }
+  .baris-merek { flex-direction: column; align-items: stretch; }
   .kepala, .isi { padding-left: 14px; padding-right: 14px; }
   .nav { width: 100%; }
+  .langkah-nav { flex-wrap: wrap; }
+  .langkah-nav button { flex: 1 1 30%; }
+  .langkah-nav button small { display: none; }
+  .judul-bagian { flex-direction: column; align-items: flex-start; }
+  .jejak { flex-direction: column; }
   .dua-kolom, .dimensi, .pasang { grid-template-columns: 1fr; }
 }
 

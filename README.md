@@ -6,7 +6,7 @@ Aplikasi rapor untuk wali kelas SD/MI, SMP/MTs, SMA, dan SMK. Format cetak mengi
 
 Buka `e-rapor.html` dengan Chrome, Edge, atau Firefox. Tidak perlu memasang aplikasi lain.
 
-Isi identitas sekolah, lalu simpan berkas `.erapor.json` ke komputer atau flashdisk. Bawa berkas itu bila pindah komputer.
+Halaman membuka langkah 1, identitas sekolah. Enam langkah di bilah atas diikuti berurutan: Sekolah, Rombel, Mapel, Nilai, Kelengkapan, lalu Cetak. Simpan berkas `.erapor.json` ke komputer atau flashdisk, dan bawa berkas itu bila pindah komputer.
 
 Untuk membangun ulang halaman itu dari kode sumber:
 

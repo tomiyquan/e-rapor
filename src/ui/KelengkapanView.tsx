@@ -19,7 +19,14 @@ export function KelengkapanView() {
   const [muridId, setMuridId] = useState("");
   if (!berkas) return null;
   const rombel = berkas.rombel.find((item) => item.id === rombelId) ?? berkas.rombel[0];
-  if (!rombel) return <section className="kartu"><p>Buat rombel terlebih dahulu.</p></section>;
+  if (!rombel) {
+    return (
+      <section className="kartu">
+        <h2>Kelengkapan rapor</h2>
+        <p>Lengkapi bagian ini setelah murid terdaftar. Kembali ke langkah Rombel bila kelas masih kosong.</p>
+      </section>
+    );
+  }
   const murid = berkas.murid.filter((item) => item.rombelId === rombel.id).sort((a, b) => a.nama.localeCompare(b.nama, "id"));
   const muridAktif = murid.find((item) => item.id === muridId) ?? murid[0];
   const kok = berkas.kokurikuler.find((item) => item.muridId === muridAktif?.id);
@@ -35,7 +42,8 @@ export function KelengkapanView() {
           {berkas.rombel.map((item) => <option key={item.id} value={item.id}>{namaRombel(item)}</option>)}
         </select>
       </label>
-      <h3>Ketidakhadiran {namaRombel(rombel)}</h3>
+      <h3>1. Ketidakhadiran {namaRombel(rombel)}</h3>
+      <p className="senyap">Isi jumlah hari. Angka nol tetap tercetak bila murid tidak absen.</p>
       <div className="tabel-bungkus">
         <table className="tabel">
           <thead>
@@ -76,7 +84,7 @@ export function KelengkapanView() {
         </div>
         {muridAktif && kok && (
           <div>
-            <h3>{muridAktif.nama}</h3>
+            <h3>2. Kokurikuler {muridAktif.nama}</h3>
             <label className="bidang">Kegiatan kokurikuler semester ini
               <textarea value={kok.kegiatan} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { kegiatan: event.target.value }))} />
             </label>
@@ -127,7 +135,7 @@ export function KelengkapanView() {
             <label className="bidang">Deskripsi kokurikuler yang dicetak
               <textarea value={kok.deskripsi} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { deskripsi: event.target.value }))} />
             </label>
-            <h3>Ekstrakurikuler</h3>
+            <h3>3. Ekstrakurikuler dan catatan</h3>
             {berkas.ekskul.filter((item) => item.muridId === muridAktif.id).map((item) => (
               <div className="baris-aksi" key={item.id}>
                 <input aria-label="Nama ekstrakurikuler" value={item.nama} onChange={(event) => ubah((saatIni) => ubahEkskul(saatIni, item.id, { nama: event.target.value }))} />

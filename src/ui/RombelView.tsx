@@ -18,7 +18,7 @@ import {
 import { useBerkas } from "../state/BerkasContext";
 import { Bidang } from "./komponen";
 
-export function RombelView() {
+export function RombelView({ bagian }: { bagian: "kelas" | "mapel" }) {
   const { berkas, ubah } = useBerkas();
   const [rombelId, setRombelId] = useState(berkas?.rombel[0]?.id ?? "");
   const [kelas, setKelas] = useState(daftarKelas(berkas?.sekolah.jenjang ?? "SD", berkas?.sekolah.programSmk ?? 3)[0]?.nilai ?? "1");
@@ -42,7 +42,8 @@ export function RombelView() {
 
   return (
     <section className="kartu">
-      <h2>Rombel</h2>
+      <h2>{bagian === "kelas" ? "Kelas dan murid" : "Mata pelajaran rombel"}</h2>
+      {bagian === "kelas" && (
       <form
         className="baris-aksi"
         onSubmit={(event) => {
@@ -68,7 +69,14 @@ export function RombelView() {
         </Bidang>
         <button className="tombol" type="submit">Tambah rombel</button>
       </form>
-      {berkas.rombel.length === 0 && <p className="senyap">Belum ada rombel. Mata pelajaran akan mengikuti struktur jenjang yang dipilih.</p>}
+      )}
+      {berkas.rombel.length === 0 && (
+        <p className="senyap">
+          {bagian === "kelas"
+            ? "Belum ada rombel. Daftar mata pelajaran awal akan mengikuti jenjang sekolah."
+            : "Belum ada rombel. Kembali ke langkah Rombel, lalu tambahkan kelas dan murid."}
+        </p>
+      )}
       <div className="daftar-rombel">
         {berkas.rombel.map((item) => (
           <button key={item.id} type="button" className={item.id === rombel?.id ? "aktif" : ""} onClick={() => setRombelId(item.id)}>
@@ -78,50 +86,60 @@ export function RombelView() {
       </div>
       {rombel && (
         <>
-          <div className="kisi">
+          {bagian === "kelas" && (
             <Bidang label="Nama wali kelas" id="wali-ubah">
               <input id="wali-ubah" value={rombel.waliKelas} onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, rombel.id, { waliKelas: event.target.value }))} />
             </Bidang>
-            <Bidang label="Cara mengolah nilai" id="mode">
-              <select
-                id="mode"
-                value={rombel.mode}
-                onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, rombel.id, { mode: event.target.value as ModePenilaian }))}
-              >
-                <option value="semester">Rapor semester</option>
-                <option value="asesmen">Asesmen penuh</option>
-              </select>
-            </Bidang>
-            <Bidang label="Ambang ketercapaian" id="ambang">
-              <input
-                id="ambang"
-                inputMode="decimal"
-                value={rombel.ambang ?? ""}
-                placeholder="Diisi sekolah"
-                onChange={(event) => {
-                  const teks = event.target.value.replace(",", ".");
-                  ubah((saatIni) => ubahRombel(saatIni, rombel.id, { ambang: teks === "" ? null : Number(teks) }));
-                }}
-              />
-            </Bidang>
-          </div>
-          {rombel.fase === "A" && (
-            <label className="centang">
-              <input
-                type="checkbox"
-                checked={rombel.sembunyikanAngka}
-                onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, rombel.id, { sembunyikanAngka: event.target.checked }))}
-              />
-              Rapor Fase A tanpa angka, hanya deskripsi capaian
-            </label>
           )}
-          <p className="senyap">
-            {rombel.mode === "semester"
-              ? "Rapor semester memakai beberapa nilai sumatif. Deskripsi diketik wali kelas."
-              : "Asesmen penuh memakai tujuan pembelajaran. Draf deskripsi diambil dari capaian tertinggi dan yang masih perlu pendampingan."}
-            {" "}Ambang ketercapaian ditentukan satuan pendidikan, bukan angka baku nasional.
-          </p>
+          {bagian === "mapel" && (
+            <>
+              <div className="kisi">
+                <Bidang label="Cara mengolah nilai" id="mode">
+                  <select
+                    id="mode"
+                    value={rombel.mode}
+                    onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, rombel.id, { mode: event.target.value as ModePenilaian }))}
+                  >
+                    <option value="semester">Rapor semester, dari beberapa nilai sumatif</option>
+                    <option value="asesmen">Asesmen penuh, dari tujuan pembelajaran</option>
+                  </select>
+                </Bidang>
+                <Bidang label="Ambang ketercapaian" id="ambang">
+                  <input
+                    id="ambang"
+                    inputMode="decimal"
+                    value={rombel.ambang ?? ""}
+                    placeholder="Diisi sekolah, misalnya 75"
+                    onChange={(event) => {
+                      const teks = event.target.value.replace(",", ".");
+                      ubah((saatIni) => ubahRombel(saatIni, rombel.id, { ambang: teks === "" ? null : Number(teks) }));
+                    }}
+                  />
+                </Bidang>
+              </div>
+              {rombel.fase === "A" && (
+                <label className="centang">
+                  <input
+                    id="sembunyikan-angka"
+                    type="checkbox"
+                    checked={rombel.sembunyikanAngka}
+                    onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, rombel.id, { sembunyikanAngka: event.target.checked }))}
+                  />
+                  Rapor Fase A tanpa angka, hanya deskripsi capaian
+                </label>
+              )}
+              <p className="senyap">
+                {rombel.mode === "semester"
+                  ? "Rapor semester memakai beberapa nilai sumatif. Deskripsi diketik wali kelas pada langkah Nilai."
+                  : "Asesmen penuh memakai tujuan pembelajaran. Draf deskripsi diambil dari capaian tertinggi dan yang masih perlu pendampingan."}
+                {" "}Asesmen formatif tidak masuk nilai akhir.
+              </p>
+            </>
+          )}
+          {bagian === "kelas" && (
+          <>
           <h3>Murid</h3>
+          <p className="senyap">NISN harus sama dengan yang nanti diisi guru mapel pada lembar kerja. Agama murid memilih nama mata pelajaran agama.</p>
           <form
             className="baris-aksi"
             onSubmit={(event) => {
@@ -195,7 +213,9 @@ export function RombelView() {
               </tbody>
             </table>
           </div>
-          {pilihan.length > 0 && (
+          </>
+          )}
+          {bagian === "mapel" && pilihan.length > 0 && (
             <>
               <h3>Mapel pilihan murid</h3>
               <div className="tabel-bungkus">
@@ -230,54 +250,61 @@ export function RombelView() {
               </div>
             </>
           )}
-          <h3>Mata pelajaran</h3>
-          <DaftarMapel mapel={aktif} ubah={ubah} />
-          {dorman.length > 0 && (
-            <details>
-              <summary>Mata pelajaran yang belum diaktifkan ({dorman.length})</summary>
-              <DaftarMapel mapel={dorman} ubah={ubah} />
-            </details>
+          {bagian === "mapel" && (
+            <>
+              <h3>Mata pelajaran yang dipakai</h3>
+              <p className="senyap">Centang Pakai pada mapel yang diajarkan. Cara hitung boleh berbeda tiap mapel: rata-rata, pembobotan, atau persentase yang mencapai ambang. Centang prasyarat berurutan bila nilai akhir cukup memakai tujuan terakhir.</p>
+              <DaftarMapel mapel={aktif} ubah={ubah} />
+              {dorman.length > 0 && (
+                <details>
+                  <summary>Mata pelajaran yang belum diaktifkan ({dorman.length})</summary>
+                  <DaftarMapel mapel={dorman} ubah={ubah} />
+                </details>
+              )}
+              <form
+                className="baris-aksi"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  if (!mapelBaru.trim()) return;
+                  ubah((saatIni) => tambahMapel(saatIni, {
+                    rombelId: rombel.id,
+                    nama: mapelBaru,
+                    kelompok: kelompokBaru,
+                    berlakuUntuk: kelompokBaru === "pilihan" ? "per-murid" : "semua",
+                  }));
+                  setMapelBaru("");
+                }}
+              >
+                <Bidang label="Tambah mapel atau muatan lokal" id="mapel-baru">
+                  <input id="mapel-baru" value={mapelBaru} onChange={(event) => setMapelBaru(event.target.value)} />
+                </Bidang>
+                <Bidang label="Kelompok" id="kelompok-baru">
+                  <select id="kelompok-baru" value={kelompokBaru} onChange={(event) => setKelompokBaru(event.target.value as KelompokMapel)}>
+                    <option value="mulok">Muatan lokal</option>
+                    <option value="wajib">Wajib</option>
+                    <option value="umum">Umum</option>
+                    <option value="kejuruan">Kejuruan</option>
+                    <option value="pilihan">Pilihan</option>
+                  </select>
+                </Bidang>
+                <button className="tombol kedua" type="submit">Tambah mapel</button>
+              </form>
+            </>
           )}
-          <form
-            className="baris-aksi"
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (!mapelBaru.trim()) return;
-              ubah((saatIni) => tambahMapel(saatIni, {
-                rombelId: rombel.id,
-                nama: mapelBaru,
-                kelompok: kelompokBaru,
-                berlakuUntuk: kelompokBaru === "pilihan" ? "per-murid" : "semua",
-              }));
-              setMapelBaru("");
-            }}
-          >
-            <Bidang label="Tambah mapel atau muatan lokal" id="mapel-baru">
-              <input id="mapel-baru" value={mapelBaru} onChange={(event) => setMapelBaru(event.target.value)} />
-            </Bidang>
-            <Bidang label="Kelompok" id="kelompok-baru">
-              <select id="kelompok-baru" value={kelompokBaru} onChange={(event) => setKelompokBaru(event.target.value as KelompokMapel)}>
-                <option value="mulok">Muatan lokal</option>
-                <option value="wajib">Wajib</option>
-                <option value="umum">Umum</option>
-                <option value="kejuruan">Kejuruan</option>
-                <option value="pilihan">Pilihan</option>
-              </select>
-            </Bidang>
-            <button className="tombol kedua" type="submit">Tambah mapel</button>
-          </form>
-          <button
-            className="tombol bahaya"
-            type="button"
-            onClick={() => {
-              if (window.confirm(`Hapus ${namaRombel(rombel)} beserta nilainya?`)) {
-                ubah((saatIni) => hapusRombel(saatIni, rombel.id));
-                setRombelId("");
-              }
-            }}
-          >
-            Hapus rombel ini
-          </button>
+          {bagian === "kelas" && (
+            <button
+              className="tombol bahaya"
+              type="button"
+              onClick={() => {
+                if (window.confirm(`Hapus ${namaRombel(rombel)} beserta nilainya?`)) {
+                  ubah((saatIni) => hapusRombel(saatIni, rombel.id));
+                  setRombelId("");
+                }
+              }}
+            >
+              Hapus rombel ini
+            </button>
+          )}
         </>
       )}
     </section>

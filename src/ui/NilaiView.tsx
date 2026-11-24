@@ -26,7 +26,14 @@ export function NilaiView() {
   const [info, setInfo] = useState("");
   if (!berkas) return null;
   const rombel = berkas.rombel.find((item) => item.id === rombelId) ?? berkas.rombel[0];
-  if (!rombel) return <section className="kartu"><p>Buat rombel terlebih dahulu.</p></section>;
+  if (!rombel) {
+    return (
+      <section className="kartu">
+        <h2>Nilai</h2>
+        <p>Langkah ini terbuka setelah rombel dan murid ada. Kembali ke langkah Rombel, tambahkan kelas, lalu lanjut ke Mapel.</p>
+      </section>
+    );
+  }
   const mapelAktif = mapelRombel(berkas, rombel.id).filter(
     (item) => item.aktif && (item.berlakuUntuk === "semua" || berkas.murid.some((siswa) => mengikuti(berkas, siswa, item))),
   );
@@ -78,7 +85,7 @@ export function NilaiView() {
           </label>
         </div>
       </div>
-      <p className="senyap">Guru mapel mengisi lembar ini di luar aplikasi. Wali kelas yang memasukkan nilainya, lewat impor atau ketikan langsung.</p>
+      <p className="senyap">Guru mapel tidak membuka aplikasi ini. Wali kelas mengunduh format, menerima isiannya, lalu memasukkan nilai lewat impor atau ketikan langsung. Nilai akhir hanya dari sumatif.</p>
       <div className="baris-aksi">
         <label className="bidang">Rombel
           <select value={rombel.id} onChange={(event) => { setRombelId(event.target.value); setMapelId(""); }}>
@@ -216,7 +223,7 @@ function EditorTujuan({ mapel }: { mapel: Mapel }) {
   return (
     <div>
       <h3>Tujuan pembelajaran</h3>
-      <p className="senyap">Tulis tujuan yang benar-benar diajarkan. Bila tujuan bersifat prasyarat berurutan, centang di halaman Rombel agar nilai akhir memakai tujuan terakhir.</p>
+      <p className="senyap">Tulis tujuan yang benar-benar diajarkan. Bila tujuan bersifat prasyarat berurutan, centang kolom itu pada langkah Mapel agar nilai akhir memakai tujuan terakhir.</p>
       {daftar.map((item) => (
         <div className="baris-aksi" key={item.id}>
           <input aria-label={`Tujuan ${item.nama}`} value={item.nama} onChange={(event) => ubah((saatIni) => ubahTujuan(saatIni, item.id, { nama: event.target.value }))} />

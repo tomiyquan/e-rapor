@@ -2,14 +2,14 @@ export function BantuanView() {
   return (
     <section className="kartu">
       <h2>Cara memakai</h2>
+      <p>Buka <strong>e-rapor.html</strong> dengan Chrome, Edge, atau Firefox. Tidak perlu memasang XAMPP atau server. Bilah di atas halaman adalah urutan kerja wali kelas. Selesaikan satu langkah, lalu klik Lanjut.</p>
       <ol>
-        <li>Buka berkas <strong>e-rapor.html</strong> dengan Chrome, Edge, atau Firefox. Tidak perlu memasang XAMPP atau server.</li>
-        <li>Isi identitas satuan pendidikan, lalu simpan berkas <strong>.erapor.json</strong> ke komputer atau flashdisk.</li>
-        <li>Buat rombel. Daftar mata pelajaran mengikuti jenjang dan kelas. Aktifkan mapel pilihan, Bahasa Inggris pada SD/MI bila sekolah menyelenggarakannya, lalu tetapkan seni dan mapel pilihan tiap murid.</li>
-        <li>Pilih cara olah nilai per rombel. Rapor semester memakai beberapa nilai sumatif. Asesmen penuh memakai tujuan pembelajaran yang benar-benar diajarkan.</li>
-        <li>Unduh format isian per mata pelajaran, berikan kepada guru mapel, lalu impor kembali atau ketik nilainya.</li>
-        <li>Lengkapi kokurikuler, ekstrakurikuler, ketidakhadiran, dan catatan wali kelas. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>
-        <li>Cetak rapor dan leger. Simpan berkas sekolah lagi setelah selesai.</li>
+        <li><strong>Sekolah.</strong> Isi identitas satuan pendidikan dan semester, atau buka berkas <strong>.erapor.json</strong> yang sudah ada. Simpan berkas itu ke komputer atau flashdisk.</li>
+        <li><strong>Rombel.</strong> Buat kelas dan daftarkan murid. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
+        <li><strong>Mapel.</strong> Pilih rapor semester atau asesmen penuh, isi ambang ketercapaian sekolah, lalu centang mapel yang diajarkan. Mapel pilihan SMA, kejuruan SMK, dan Bahasa Inggris SD/MI diaktifkan hanya bila memang dipakai.</li>
+        <li><strong>Nilai.</strong> Unduh format isian per mata pelajaran untuk guru mapel, lalu impor kembali atau ketik nilainya. Sunting deskripsi sebelum dicetak.</li>
+        <li><strong>Kelengkapan.</strong> Isi ketidakhadiran, narasi kokurikuler, ekstrakurikuler, dan catatan wali kelas. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>
+        <li><strong>Cetak.</strong> Periksa rapor dan leger, lalu simpan berkas sekolah lagi.</li>
       </ol>
       <h2>Yang dihitung</h2>
       <p>

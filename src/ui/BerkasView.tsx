@@ -69,7 +69,7 @@ export function BerkasView() {
   return (
     <section className="kartu">
       <div className="judul-bagian">
-        <h2>Berkas sekolah</h2>
+        <h2>{berkas ? "Data satuan pendidikan" : "Isi data ini, atau buka berkas yang sudah ada"}</h2>
         <div className="tombol-baris">
           <label className="tombol kedua">
             Buka berkas

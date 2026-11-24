@@ -13,7 +13,14 @@ export function CetakView() {
   const [mode, setMode] = useState<ModeCetak>("satu");
   if (!berkas) return null;
   const rombel = berkas.rombel.find((item) => item.id === rombelId) ?? berkas.rombel[0];
-  if (!rombel) return <section className="kartu"><p>Buat rombel terlebih dahulu.</p></section>;
+  if (!rombel) {
+    return (
+      <section className="kartu">
+        <h2>Cetak</h2>
+        <p>Rapor bisa dicetak setelah rombel dan murid terisi. Selesaikan langkah Rombel terlebih dahulu.</p>
+      </section>
+    );
+  }
   const murid = muridRombel(berkas, rombel.id);
   const muridAktif = murid.find((item) => item.id === muridId) ?? murid[0];
 
@@ -21,7 +28,7 @@ export function CetakView() {
     <section>
       <div className="kartu jangan-cetak">
         <div className="judul-bagian">
-          <h2>Cetak</h2>
+          <h2>Siap cetak</h2>
           <div className="tombol-baris">
             <button className="tombol" type="button" onClick={() => { setMode("satu"); window.setTimeout(() => window.print(), 50); }} disabled={!muridAktif}>Cetak rapor ini</button>
             <button className="tombol kedua" type="button" onClick={() => { setMode("semua"); window.setTimeout(() => window.print(), 50); }} disabled={murid.length === 0}>Cetak semua rapor</button>
