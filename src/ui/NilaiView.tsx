@@ -75,17 +75,9 @@ export function NilaiView() {
 
   return (
     <section className="kartu">
-      <div className="judul-bagian">
-        <h2>Nilai</h2>
-        <div className="tombol-baris">
-          <button className="tombol kedua" type="button" onClick={unduh} disabled={!mapel}>Unduh format isian</button>
-          <label className="tombol kedua">
-            Impor isian
-            <input type="file" accept=".xlsx" hidden onChange={(event) => { void impor(event.target.files?.[0]); event.target.value = ""; }} />
-          </label>
-        </div>
-      </div>
+      <h2>Nilai</h2>
       <p className="senyap">Guru mapel tidak membuka aplikasi ini. Wali kelas mengunduh format, menerima isiannya, lalu memasukkan nilai lewat impor atau ketikan langsung. Nilai akhir hanya dari sumatif.</p>
+      <h3>1. Pilih rombel dan mata pelajaran</h3>
       <div className="baris-aksi">
         <label className="bidang">Rombel
           <select value={rombel.id} onChange={(event) => { setRombelId(event.target.value); setMapelId(""); }}>
@@ -100,9 +92,19 @@ export function NilaiView() {
       </div>
       {galat.length > 0 && <Pesan jenis="galat" anak={galat.join(" ")} />}
       {info && <Pesan jenis="baik" anak={info} />}
-      {mapel && <p className="senyap">{teksCaraHitung(mapel, rombel)} Pilihan ini diubah di langkah Mapel.</p>}
+      <h3>2. Sesuaikan kegiatan yang dinilai</h3>
+      {mapel && <p className="senyap">{teksCaraHitung(mapel, rombel)} Pilihan ini diubah di langkah Mapel. Tambah, ubah nama, atau hapus kegiatan di bawah ini sebelum mengisi angka.</p>}
       {mapel && rombel.mode === "semester" && <EditorSumatif mapel={mapel} />}
       {mapel && rombel.mode === "asesmen" && <EditorTujuan mapel={mapel} />}
+      <h3>3. Isi nilai, capaian kompetensi menyusul sendiri</h3>
+      <p className="senyap">Ketik nilai pada tabel, atau unduh format untuk guru mapel lalu impor kembali. Capaian kompetensi terisi otomatis begitu ada angka. Sunting kalimat bila perlu; mengubah nilai akan menyusun ulang kalimat itu.</p>
+      <div className="tombol-baris">
+        <button className="tombol kedua" type="button" onClick={unduh} disabled={!mapel}>Unduh format isian</button>
+        <label className="tombol kedua">
+          Impor isian
+          <input type="file" accept=".xlsx" hidden onChange={(event) => { void impor(event.target.files?.[0]); event.target.value = ""; }} />
+        </label>
+      </div>
       {mapel && (
         <div className="tabel-bungkus">
           <table className="tabel">
@@ -160,11 +162,9 @@ export function NilaiView() {
                     </td>
                     <td>
                       {deskripsi?.catatanGuru && <p className="senyap">Catatan guru: {deskripsi.catatanGuru}</p>}
-                      {rombel.mode === "asesmen" && (
-                        <button className="tombol kedua" type="button" onClick={() => ubah((saatIni) => setDeskripsi(saatIni, item.id, mapel.id, susunDraf(saatIni, rombel, mapel, item.id), deskripsi?.catatanGuru))}>
-                          Susun draf
-                        </button>
-                      )}
+                      <button className="tombol kedua" type="button" onClick={() => ubah((saatIni) => setDeskripsi(saatIni, item.id, mapel.id, susunDraf(saatIni, rombel, mapel, item.id), deskripsi?.catatanGuru))}>
+                        Susun ulang
+                      </button>
                       <textarea
                         aria-label={`Deskripsi ${item.nama}`}
                         value={deskripsi?.teks ?? ""}

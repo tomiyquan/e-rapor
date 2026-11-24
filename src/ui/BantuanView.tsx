@@ -2,14 +2,14 @@ export function BantuanView() {
   return (
     <section className="kartu">
       <h2>Cara memakai</h2>
-      <p>Buka <strong>e-rapor.html</strong> dengan Chrome, Edge, atau Firefox. Tidak perlu memasang XAMPP atau server. Bilah di atas halaman adalah urutan kerja wali kelas. Selesaikan satu langkah, lalu klik Lanjut.</p>
+      <p>Buka <strong>e-rapor.html</strong> dengan Chrome, Edge, atau Firefox. Tidak perlu memasang XAMPP atau server. Bilah di atas halaman adalah urutan kerja wali kelas. Langkah berikutnya baru bisa dibuka setelah langkah yang sedang dikerjakan terisi.</p>
       <ol>
         <li><strong>Sekolah.</strong> Isi identitas satuan pendidikan dan semester, atau buka berkas <strong>.erapor.json</strong> yang sudah ada. Simpan berkas itu ke komputer atau flashdisk.</li>
-        <li><strong>Rombel.</strong> Buat kelas, nama rombel, dan wali kelas.</li>
+        <li><strong>Rombel.</strong> Klik Tambah rombel. Isi kelas, nama rombel, dan wali kelas pada jendela. Daftar rombel tampil sebagai tabel.</li>
         <li><strong>Murid.</strong> Klik Tambah murid, isi data pada jendela, lalu simpan. Agama murid menentukan mata pelajaran agama. Pilih satu jenis seni bila sekolah menyelenggarakannya.</li>
         <li><strong>Mapel.</strong> Pilih rapor semester atau asesmen penuh. Ambang rombel berlaku untuk semua mapel; isi ambang pada baris mapel bila KKM-nya berbeda. Cara hitung tiap mapel diikuti tab Nilai. Centang Nilai terakhir bila tujuan berurutan dan saling menjadi syarat.</li>
-        <li><strong>Nilai.</strong> Unduh format isian per mata pelajaran untuk guru mapel, lalu impor kembali atau ketik nilainya. Sunting deskripsi sebelum dicetak.</li>
-        <li><strong>Kelengkapan.</strong> Isi ketidakhadiran, narasi kokurikuler, ekstrakurikuler, dan catatan wali kelas. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>
+        <li><strong>Nilai.</strong> Ikuti nomor 1, 2, dan 3 pada halaman. Capaian kompetensi terisi sendiri setelah angka nilai ada, dan masih bisa disunting.</li>
+        <li><strong>Kelengkapan.</strong> Pilih rombel, lalu pilih nama murid. Isi ketidakhadiran dan narasi kokurikuler. Contoh narasi tertulis pada kotak sebagai penuntun. Pada semester genap, catat keputusan musyawarah kenaikan kelas.</li>
         <li><strong>Cetak.</strong> Periksa rapor dan leger, lalu simpan berkas sekolah lagi.</li>
       </ol>
       <h2>Yang dihitung</h2>
@@ -17,7 +17,7 @@ export function BantuanView() {
         Nilai akhir hanya berasal dari asesmen sumatif. Asesmen formatif tidak digabung dan tidak menjadi pembagi. Tiap mapel punya cara hitung sendiri. Rata-rata tidak memakai bobot. Pembobotan menampilkan bobot yang jumlahnya 100% dan tiap komponen dibulatkan. Persentase menghitung bagian nilai yang mencapai ambang mapel, atau ambang rombel bila mapel tidak diisi sendiri. Nilai terakhir dipakai bila tujuan berurutan: angka rapor adalah tujuan terakhir yang terisi.
       </p>
       <p>
-        Deskripsi menyebut kompetensi yang sudah dikuasai dan yang masih perlu pendampingan, dengan kalimat yang dapat diedit sebelum dicetak. Kokurikuler berupa satu narasi dimensi profil lulusan, bukan angka. Rapor tidak memuat peringkat.
+        Deskripsi menyebut kompetensi yang sudah dikuasai dan yang masih perlu pendampingan. Kalimat itu terisi otomatis dari nilai, lalu dapat diedit sebelum dicetak. Kokurikuler berupa satu narasi dimensi profil lulusan, bukan angka. Rapor murid tidak memuat peringkat. Peringkat hanya ada pada berkas rekap, diurut dari nomor 1.
       </p>
       <h2>Sumber</h2>
       <ul>

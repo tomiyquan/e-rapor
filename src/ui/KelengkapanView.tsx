@@ -37,11 +37,18 @@ export function KelengkapanView() {
   return (
     <section className="kartu">
       <h2>Kelengkapan rapor</h2>
-      <label className="bidang">Rombel
-        <select value={rombel.id} onChange={(event) => { setRombelId(event.target.value); setMuridId(""); }}>
-          {berkas.rombel.map((item) => <option key={item.id} value={item.id}>{namaRombel(item)}</option>)}
-        </select>
-      </label>
+      <div className="baris-aksi">
+        <label className="bidang">Rombel
+          <select value={rombel.id} onChange={(event) => { setRombelId(event.target.value); setMuridId(""); }}>
+            {berkas.rombel.map((item) => <option key={item.id} value={item.id}>{namaRombel(item)}</option>)}
+          </select>
+        </label>
+        <label className="bidang">Nama murid
+          <select value={muridAktif?.id ?? ""} onChange={(event) => setMuridId(event.target.value)}>
+            {murid.map((item) => <option key={item.id} value={item.id}>{item.nama}</option>)}
+          </select>
+        </label>
+      </div>
       <h3>1. Ketidakhadiran {namaRombel(rombel)}</h3>
       <p className="senyap">Isi jumlah hari. Angka nol tetap tercetak bila murid tidak absen.</p>
       <div className="tabel-bungkus">
@@ -74,19 +81,15 @@ export function KelengkapanView() {
           </tbody>
         </table>
       </div>
-      <div className="dua-kolom">
-        <div className="daftar-murid">
-          {murid.map((item) => (
-            <button key={item.id} type="button" className={item.id === muridAktif?.id ? "aktif" : ""} onClick={() => setMuridId(item.id)}>
-              {item.nama}
-            </button>
-          ))}
-        </div>
-        {muridAktif && kok && (
+      {muridAktif && kok && (
           <div>
             <h3>2. Kokurikuler {muridAktif.nama}</h3>
             <label className="bidang">Kegiatan kokurikuler semester ini
-              <textarea value={kok.kegiatan} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { kegiatan: event.target.value }))} />
+              <textarea
+                value={kok.kegiatan}
+                placeholder="Contoh: projek membuat poster hemat air bersama teman satu kelompok"
+                onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { kegiatan: event.target.value }))}
+              />
             </label>
             <p className="senyap">Pilih dimensi yang sudah dikuatkan dan yang masih perlu penguatan. Yang tercetak tetap satu narasi, bukan angka.</p>
             <div className="dimensi">
@@ -135,7 +138,11 @@ export function KelengkapanView() {
               </button>
             </div>
             <label className="bidang">Deskripsi kokurikuler yang dicetak
-              <textarea value={kok.deskripsi} onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { deskripsi: event.target.value }))} />
+              <textarea
+                value={kok.deskripsi}
+                placeholder="Contoh: Ananda sudah baik dalam kemandirian yang terlihat dari menyelesaikan tugas projek tanpa diingatkan. Ananda masih perlu pendampingan dalam kolaborasi saat bekerja dalam kelompok."
+                onChange={(event) => ubah((saatIni) => setKokurikuler(saatIni, muridAktif.id, { deskripsi: event.target.value }))}
+              />
             </label>
             <h3>3. Ekstrakurikuler dan catatan</h3>
             {berkas.ekskul.filter((item) => item.muridId === muridAktif.id).map((item) => (
@@ -182,8 +189,7 @@ export function KelengkapanView() {
               </>
             )}
           </div>
-        )}
-      </div>
+      )}
     </section>
   );
 }

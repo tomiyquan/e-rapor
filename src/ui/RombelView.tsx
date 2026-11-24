@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { daftarKelas } from "../domain/kurikulum";
 import { namaRombel } from "../domain/rapor";
-import { AGAMA, type Agama, type KelompokMapel, type Mapel, type ModePenilaian, type OpsiHitung } from "../domain/types";
+import { AGAMA, type Agama, type Jenjang, type KelompokMapel, type Mapel, type ModePenilaian, type OpsiHitung } from "../domain/types";
 import {
   aturPilihan,
   hapusMapel,
@@ -29,6 +29,7 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
   const [nis, setNis] = useState("");
   const [agama, setAgama] = useState<Agama>("Islam");
   const [formMurid, setFormMurid] = useState(false);
+  const [formRombel, setFormRombel] = useState(false);
   const [mapelBaru, setMapelBaru] = useState("");
   const [kelompokBaru, setKelompokBaru] = useState<KelompokMapel>("mulok");
 
@@ -45,44 +46,89 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
     <section className="kartu">
       <h2>{bagian === "kelas" ? "Rombel" : bagian === "murid" ? "Murid" : "Mata pelajaran rombel"}</h2>
       {bagian === "kelas" && (
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          ubah((saatIni) => tambahRombel(saatIni, { kelas, paralel, waliKelas: wali }));
-          setWali("");
-        }}
-      >
-        <div className="kisi kisi-3">
-        <Bidang label="Kelas" id="kelas-baru">
-          <select id="kelas-baru" value={kelas} onChange={(event) => setKelas(event.target.value)}>
-            {daftarKelas(berkas.sekolah.jenjang, berkas.sekolah.programSmk).map((item) => (
-              <option key={item.nilai} value={item.nilai}>
-                {item.label} · Fase {item.fase}
-              </option>
-            ))}
-          </select>
-        </Bidang>
-        <Bidang label="Rombel" id="paralel">
-          <input id="paralel" value={paralel} onChange={(event) => setParalel(event.target.value)} />
-        </Bidang>
-        <Bidang label="Wali kelas" id="wali-baru">
-          <input id="wali-baru" value={wali} onChange={(event) => setWali(event.target.value)} />
-        </Bidang>
-        </div>
-        <div className="aksi-formulir">
-          <button className="tombol" type="submit">Tambah rombel</button>
-        </div>
-      </form>
+        <>
+          <div className="kepala-daftar">
+            <p className="senyap">Satu berkas boleh berisi lebih dari satu rombel. Mata pelajaran awal mengikuti jenjang sekolah.</p>
+            <button className="tombol" type="button" onClick={() => setFormRombel(true)}>Tambah rombel</button>
+          </div>
+          {formRombel && (
+            <ModalRombel
+              jenjang={berkas.sekolah.jenjang}
+              programSmk={berkas.sekolah.programSmk}
+              kelas={kelas}
+              paralel={paralel}
+              wali={wali}
+              onKelas={setKelas}
+              onParalel={setParalel}
+              onWali={setWali}
+              onTutup={() => setFormRombel(false)}
+              onSimpan={() => {
+                ubah((saatIni) => tambahRombel(saatIni, { kelas, paralel, waliKelas: wali }));
+                setWali("");
+                setFormRombel(false);
+              }}
+            />
+          )}
+          <div className="tabel-bungkus">
+            <table className="tabel">
+              <thead>
+                <tr>
+                  <th>Kelas</th>
+                  <th>Rombel</th>
+                  <th>Fase</th>
+                  <th>Wali kelas</th>
+                  <th>Murid</th>
+                  <th className="kolom-aksi" />
+                </tr>
+              </thead>
+              <tbody>
+                {berkas.rombel.length === 0 && (
+                  <tr>
+                    <td colSpan={6}>Belum ada rombel.</td>
+                  </tr>
+                )}
+                {berkas.rombel.map((item) => (
+                  <tr key={item.id}>
+                    <td>{namaRombel(item)}</td>
+                    <td>{item.paralel}</td>
+                    <td>{item.fase}</td>
+                    <td>
+                      <input
+                        aria-label={`Wali ${namaRombel(item)}`}
+                        value={item.waliKelas}
+                        onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, item.id, { waliKelas: event.target.value }))}
+                      />
+                    </td>
+                    <td>{berkas.murid.filter((siswa) => siswa.rombelId === item.id).length}</td>
+                    <td className="kolom-aksi">
+                      <button
+                        className="tombol bahaya"
+                        type="button"
+                        onClick={() => {
+                          if (window.confirm(`Hapus ${namaRombel(item)} beserta nilainya?`)) {
+                            ubah((saatIni) => hapusRombel(saatIni, item.id));
+                            setRombelId("");
+                          }
+                        }}
+                      >
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
-      {berkas.rombel.length === 0 && (
+      {berkas.rombel.length === 0 && bagian !== "kelas" && (
         <p className="senyap">
-          {bagian === "kelas"
-            ? "Belum ada rombel. Daftar mata pelajaran awal akan mengikuti jenjang sekolah."
-            : bagian === "murid"
-              ? "Belum ada rombel. Kembali ke langkah Rombel dan buat kelas terlebih dahulu."
-              : "Belum ada rombel. Kembali ke langkah Rombel, lalu tambahkan kelas."}
+          {bagian === "murid"
+            ? "Belum ada rombel. Kembali ke langkah Rombel dan buat kelas terlebih dahulu."
+            : "Belum ada rombel. Kembali ke langkah Rombel, lalu tambahkan kelas."}
         </p>
       )}
+      {bagian !== "kelas" && (
       <div className="daftar-rombel">
         {berkas.rombel.map((item) => (
           <button key={item.id} type="button" className={item.id === rombel?.id ? "aktif" : ""} onClick={() => setRombelId(item.id)}>
@@ -90,15 +136,9 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
           </button>
         ))}
       </div>
+      )}
       {rombel && (
         <>
-          {bagian === "kelas" && (
-            <div className="kisi kisi-3">
-              <Bidang label="Nama wali kelas" id="wali-ubah">
-                <input id="wali-ubah" value={rombel.waliKelas} onChange={(event) => ubah((saatIni) => ubahRombel(saatIni, rombel.id, { waliKelas: event.target.value }))} />
-              </Bidang>
-            </div>
-          )}
           {bagian === "mapel" && (
             <>
               <div className="kisi kisi-2">
@@ -307,22 +347,6 @@ export function RombelView({ bagian }: { bagian: "kelas" | "murid" | "mapel" }) 
               </form>
             </>
           )}
-          {bagian === "kelas" && (
-            <div className="aksi-formulir">
-              <button
-                className="tombol bahaya"
-                type="button"
-                onClick={() => {
-                  if (window.confirm(`Hapus ${namaRombel(rombel)} beserta nilainya?`)) {
-                    ubah((saatIni) => hapusRombel(saatIni, rombel.id));
-                    setRombelId("");
-                  }
-                }}
-              >
-                Hapus rombel ini
-              </button>
-            </div>
-          )}
         </>
       )}
     </section>
@@ -407,6 +431,89 @@ function DaftarMapel({
         </tbody>
       </table>
     </div>
+  );
+}
+
+function ModalRombel({
+  jenjang,
+  programSmk,
+  kelas,
+  paralel,
+  wali,
+  onKelas,
+  onParalel,
+  onWali,
+  onTutup,
+  onSimpan,
+}: {
+  jenjang: Jenjang;
+  programSmk: 3 | 4;
+  kelas: string;
+  paralel: string;
+  wali: string;
+  onKelas: (nilai: string) => void;
+  onParalel: (nilai: string) => void;
+  onWali: (nilai: string) => void;
+  onTutup: () => void;
+  onSimpan: () => void;
+}) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const lepas = useRef(false);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    return () => {
+      lepas.current = true;
+      if (dialog.open) dialog.close();
+    };
+  }, []);
+  return (
+    <dialog
+      className="modal"
+      ref={dialogRef}
+      aria-labelledby="judul-rombel"
+      onClose={() => {
+        if (!lepas.current) onTutup();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) event.currentTarget.close();
+      }}
+    >
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSimpan();
+        }}
+      >
+        <div className="modal-kepala">
+          <h3 id="judul-rombel">Tambah rombel</h3>
+        </div>
+        <div className="modal-isi">
+          <div className="tumpuk">
+            <Bidang label="Kelas" id="kelas-baru">
+              <select id="kelas-baru" value={kelas} autoFocus onChange={(event) => onKelas(event.target.value)}>
+                {daftarKelas(jenjang, programSmk).map((item) => (
+                  <option key={item.nilai} value={item.nilai}>
+                    {item.label} · Fase {item.fase}
+                  </option>
+                ))}
+              </select>
+            </Bidang>
+            <Bidang label="Rombel" id="paralel">
+              <input id="paralel" value={paralel} onChange={(event) => onParalel(event.target.value)} />
+            </Bidang>
+            <Bidang label="Wali kelas" id="wali-baru">
+              <input id="wali-baru" value={wali} onChange={(event) => onWali(event.target.value)} />
+            </Bidang>
+          </div>
+        </div>
+        <div className="modal-aksi">
+          <button className="tombol kedua" type="button" onClick={() => dialogRef.current?.close()}>Batal</button>
+          <button className="tombol" type="submit">Simpan</button>
+        </div>
+      </form>
+    </dialog>
   );
 }
 

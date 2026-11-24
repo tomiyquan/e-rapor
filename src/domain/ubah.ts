@@ -1,4 +1,5 @@
 import { infoKelas, templatMapel } from "./kurikulum";
+import { susunDraf } from "./rapor";
 import {
   AGAMA,
   NAMA_AGAMA,
@@ -358,11 +359,28 @@ export function hapusTujuan(berkas: Berkas, tujuanId: string): Berkas {
   return berikutnya;
 }
 
+function segarkanCapaian(berkas: Berkas, muridId: string, mapelId: string): void {
+  const murid = berkas.murid.find((item) => item.id === muridId);
+  const mapel = berkas.mapel.find((item) => item.id === mapelId);
+  const rombel = berkas.rombel.find((item) => item.id === murid?.rombelId);
+  if (!murid || !mapel || !rombel) return;
+  const draf = susunDraf(berkas, rombel, mapel, muridId).trim();
+  if (!draf) return;
+  let ada = berkas.deskripsi.find((item) => item.muridId === muridId && item.mapelId === mapelId);
+  if (!ada) {
+    ada = { muridId, mapelId, teks: "", catatanGuru: "" };
+    berkas.deskripsi.push(ada);
+  }
+  ada.teks = draf;
+}
+
 export function setNilaiSumatif(berkas: Berkas, muridId: string, butirId: string, nilai: number | null): Berkas {
   const berikutnya = salin(berkas);
   const ada = berikutnya.nilaiSumatif.find((item) => item.muridId === muridId && item.butirId === butirId);
   if (ada) ada.nilai = nilai;
   else berikutnya.nilaiSumatif.push({ muridId, butirId, nilai });
+  const mapelId = berikutnya.sumatif.find((item) => item.id === butirId)?.mapelId;
+  if (mapelId) segarkanCapaian(berikutnya, muridId, mapelId);
   return berikutnya;
 }
 
@@ -380,6 +398,8 @@ export function setNilaiTujuan(
   }
   if ("nilai" in perubahan) ada.nilai = perubahan.nilai ?? null;
   if ("skala" in perubahan) ada.skala = perubahan.skala ?? null;
+  const mapelId = berikutnya.tujuan.find((item) => item.id === tujuanId)?.mapelId;
+  if (mapelId) segarkanCapaian(berikutnya, muridId, mapelId);
   return berikutnya;
 }
 

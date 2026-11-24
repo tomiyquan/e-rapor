@@ -159,11 +159,35 @@ function selCsv(nilai: string | number): string {
   return `"${String(nilai).replaceAll('"', '""')}"`;
 }
 
+export function urutanRekap(berkas: Berkas, rombel: Rombel): { murid: Murid; peringkat: number | null }[] {
+  const daftar = muridRombel(berkas, rombel.id).map((murid) => {
+    const angka = barisRapor(berkas, rombel, murid)
+      .map((item) => item.nilai)
+      .filter((nilai): nilai is number => nilai !== null);
+    const rata = angka.length === 0 ? null : angka.reduce((jumlah, nilai) => jumlah + nilai, 0) / angka.length;
+    return { murid, rata, peringkat: null as number | null };
+  });
+  const berperingkat = daftar
+    .filter((item) => item.rata !== null)
+    .sort((a, b) => b.rata! - a.rata! || a.murid.nama.localeCompare(b.murid.nama, "id"));
+  let nomor = 0;
+  let sebelumnya: number | null = null;
+  berperingkat.forEach((item, indeks) => {
+    if (sebelumnya === null || item.rata !== sebelumnya) nomor = indeks + 1;
+    sebelumnya = item.rata;
+    item.peringkat = nomor;
+  });
+  const tanpaNilai = daftar
+    .filter((item) => item.rata === null)
+    .sort((a, b) => a.murid.nama.localeCompare(b.murid.nama, "id"));
+  return [...berperingkat, ...tanpaNilai].map((item) => ({ murid: item.murid, peringkat: item.peringkat }));
+}
+
 export function rekapCsv(berkas: Berkas, rombel: Rombel): string {
-  const baris = [["NISN", "Nama", "Mata Pelajaran", "Nilai Akhir", "Capaian Kompetensi"].map(selCsv).join(";")];
-  for (const murid of muridRombel(berkas, rombel.id)) {
-    for (const item of barisRapor(berkas, rombel, murid)) {
-      baris.push([murid.nisn, murid.nama, item.nama, item.nilai ?? "", item.deskripsi].map(selCsv).join(";"));
+  const baris = [["Peringkat", "NISN", "Nama", "Mata Pelajaran", "Nilai Akhir", "Capaian Kompetensi"].map(selCsv).join(";")];
+  for (const entri of urutanRekap(berkas, rombel)) {
+    for (const item of barisRapor(berkas, rombel, entri.murid)) {
+      baris.push([entri.peringkat ?? "", entri.murid.nisn, entri.murid.nama, item.nama, item.nilai ?? "", item.deskripsi].map(selCsv).join(";"));
     }
   }
   return `\uFEFF${baris.join("\n")}`;

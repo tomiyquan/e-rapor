@@ -39,9 +39,9 @@ const LANGKAH: Langkah[] = [
     ringkas: "Kelas",
     judul: "Buat rombel",
     urut: [
-      "Pilih kelas, nama rombel, dan wali kelas.",
-      "Klik Tambah rombel. Satu berkas boleh berisi lebih dari satu rombel.",
-      "Lanjut ke Murid untuk mendaftarkan siswa rombel itu.",
+      "Klik Tambah rombel, lalu isi kelas, nama rombel, dan wali kelas pada jendela.",
+      "Daftar rombel tampil sebagai tabel. Wali kelas bisa diubah langsung pada barisnya.",
+      "Langkah Murid terbuka setelah sedikitnya satu rombel tersimpan.",
     ],
   },
   {
@@ -64,7 +64,7 @@ const LANGKAH: Langkah[] = [
     judul: "Pilih cara nilai dan mata pelajaran",
     urut: [
       "Pilih rapor semester atau asesmen penuh. Pilihan ini berlaku untuk rombel yang sedang dibuka.",
-      "Isi ambang rombel bila sekolah sudah menetapkannya. Angka itu dipakai semua mapel. Isi kolom Ambang pada satu mapel bila KKM-nya berbeda.",
+      "Isi ambang rombel. Angka itu dipakai semua mapel, dan langkah Nilai terbuka setelah ambang terisi. Isi kolom Ambang pada satu mapel bila KKM-nya berbeda.",
       "Pilih cara hitung tiap mapel. Tab Nilai mengikuti pilihan itu: bobot hanya muncul pada pembobotan.",
       "Centang Nilai terakhir bila tujuan berurutan dan saling menjadi syarat. Nilai rapor lalu memakai tujuan terakhir yang terisi.",
     ],
@@ -76,9 +76,9 @@ const LANGKAH: Langkah[] = [
     ringkas: "Isian guru",
     judul: "Masukkan nilai dari guru mapel",
     urut: [
-      "Pilih satu mata pelajaran.",
-      "Pada rapor semester, tulis kegiatan sumatif. Pada asesmen penuh, tulis tujuan yang benar-benar diajarkan.",
-      "Unduh format isian untuk guru mapel, lalu impor kembali. Nilai juga bisa diketik langsung di tabel.",
+      "Ikuti nomor pada halaman: pilih mapel, susun kegiatan, lalu isi nilai.",
+      "Capaian kompetensi terisi sendiri setelah ada angka. Sunting kalimat bila perlu.",
+      "Langkah Kelengkapan terbuka setelah sedikitnya satu nilai tersimpan.",
     ],
   },
   {
@@ -88,8 +88,8 @@ const LANGKAH: Langkah[] = [
     ringkas: "Selain nilai",
     judul: "Lengkapi bagian rapor di luar nilai",
     urut: [
-      "Isi sakit, izin, dan tanpa keterangan untuk seluruh murid.",
-      "Pilih murid, centang dimensi kokurikuler, lalu susun narasinya. Bagian ini tidak berisi angka.",
+      "Pilih rombel, lalu pilih nama murid pada daftar.",
+      "Isi ketidakhadiran. Centang dimensi kokurikuler dan susun narasinya. Kotak narasi memuat contoh.",
       "Tambahkan ekstrakurikuler dan catatan wali kelas. Pada semester genap, catat keputusan musyawarah.",
     ],
   },
@@ -112,19 +112,18 @@ function langkahSelesai(id: Langkah["id"], berkas: Berkas | null): boolean {
   if (id === "berkas") return true;
   if (id === "rombel") return berkas.rombel.length > 0;
   if (id === "murid") return berkas.murid.length > 0;
-  if (id === "mapel") {
-    const agama = new Set(berkas.mapel.filter((item) => item.jenis === "agama").map((item) => item.id));
-    return berkas.rombel.some((item) => item.ambang !== null || item.mode === "asesmen" || item.sembunyikanAngka)
-      || berkas.sumatif.length > 0
-      || berkas.tujuan.length > 0
-      || berkas.mapel.some((item) => !item.bawaan)
-      || berkas.pilihan.some((item) => !agama.has(item.mapelId));
-  }
+  if (id === "mapel") return berkas.rombel.length > 0 && berkas.rombel.every((item) => typeof item.ambang === "number" && !Number.isNaN(item.ambang));
   if (id === "nilai") {
     return berkas.nilaiSumatif.some((item) => item.nilai !== null) || berkas.nilaiTujuan.some((item) => item.nilai !== null);
   }
   if (id === "kelengkapan") return berkas.kokurikuler.some((item) => item.deskripsi.trim().length > 0);
-  return berkas.murid.length > 0 && berkas.kokurikuler.some((item) => item.deskripsi.trim().length > 0);
+  return berkas.kokurikuler.some((item) => item.deskripsi.trim().length > 0);
+}
+
+function langkahTerbuka(id: Langkah["id"], berkas: Berkas | null): boolean {
+  const indeks = LANGKAH.findIndex((item) => item.id === id);
+  if (indeks <= 0) return true;
+  return LANGKAH.slice(0, indeks).every((item) => langkahSelesai(item.id, berkas));
 }
 
 function petunjukBerikut(berkas: Berkas | null): string {
@@ -145,7 +144,11 @@ export function App() {
   const indeksAktif = LANGKAH.findIndex((item) => item.id === aktif);
 
   function bukaLangkah(id: Layar) {
-    if (id !== "berkas" && id !== "bantuan" && !berkas) return;
+    if (id === "bantuan") {
+      setLayar(id);
+      return;
+    }
+    if (!langkahTerbuka(id, berkas)) return;
     setLayar(id);
   }
 
@@ -170,7 +173,7 @@ export function App() {
         <nav className="nav langkah-nav" aria-label="Langkah pengisian rapor">
           {LANGKAH.map((item, urutan) => {
             const selesai = langkahSelesai(item.id, berkas);
-            const terkunci = !berkas && item.id !== "berkas";
+            const terkunci = !langkahTerbuka(item.id, berkas);
             return (
               <button
                 key={item.id}
@@ -178,6 +181,7 @@ export function App() {
                 data-langkah={item.data}
                 className={[aktif === item.id ? "aktif" : "", selesai ? "selesai" : ""].filter(Boolean).join(" ")}
                 disabled={terkunci}
+                title={terkunci ? "Selesaikan langkah sebelumnya terlebih dahulu" : undefined}
                 onClick={() => bukaLangkah(item.id)}
               >
                 <span className="nomor">{selesai && aktif !== item.id ? "✓" : urutan + 1}</span>
@@ -226,7 +230,7 @@ export function App() {
               className="tombol"
               type="button"
               onClick={() => bukaLangkah(LANGKAH[Math.min(LANGKAH.length - 1, indeksAktif + 1)].id)}
-              disabled={indeksAktif >= LANGKAH.length - 1 || (!berkas && indeksAktif === 0)}
+              disabled={indeksAktif >= LANGKAH.length - 1 || !langkahSelesai(LANGKAH[indeksAktif].id, berkas)}
             >
               Lanjut ke {LANGKAH[Math.min(LANGKAH.length - 1, indeksAktif + 1)].label}
             </button>

@@ -4,7 +4,7 @@ import { normalkan } from "./berkas";
 import { drafDeskripsi, drafKokurikuler } from "./deskripsi";
 import { bacaLembar, buatLembar } from "./lembar";
 import { hitungNilaiAkhir } from "./nilai";
-import { ambangBerlaku, hasilMapel, teksCaraHitung } from "./rapor";
+import { ambangBerlaku, hasilMapel, rekapCsv, teksCaraHitung, urutanRekap } from "./rapor";
 import { templatMapel } from "./kurikulum";
 import { buatBerkas, setNilaiSumatif, tambahMurid, tambahRombel, tambahSumatif, ubahMapel, ubahRombel } from "./ubah";
 import type { Berkas } from "./types";
@@ -92,6 +92,40 @@ describe("hitungNilaiAkhir", () => {
       nilai: null,
       pesan: null,
     });
+  });
+});
+
+describe("capaian otomatis dan peringkat rekap", () => {
+  it("mengisi capaian kompetensi begitu nilai tersimpan", () => {
+    let berkas = sekolahDasar();
+    const rombel = berkas.rombel[0];
+    berkas = ubahRombel(berkas, rombel.id, { ambang: 75 });
+    const matematika = berkas.mapel.find((item) => item.kode === "matematika")!;
+    const edo = berkas.murid.find((item) => item.nama === "Edo")!;
+    berkas = tambahSumatif(berkas, matematika.id, "menjumlah bilangan cacah");
+    berkas = tambahSumatif(berkas, matematika.id, "mengukur panjang");
+    const butir = berkas.sumatif.filter((item) => item.mapelId === matematika.id);
+    berkas = setNilaiSumatif(berkas, edo.id, butir[0].id, 90);
+    berkas = setNilaiSumatif(berkas, edo.id, butir[1].id, 60);
+    const teks = berkas.deskripsi.find((item) => item.muridId === edo.id && item.mapelId === matematika.id)?.teks ?? "";
+    expect(teks).toMatch(/menjumlah bilangan cacah/);
+    expect(teks).toMatch(/mengukur panjang/);
+  });
+
+  it("mengurutkan rekap dari peringkat terkecil", () => {
+    let berkas = sekolahDasar();
+    const matematika = berkas.mapel.find((item) => item.kode === "matematika")!;
+    const edo = berkas.murid.find((item) => item.nama === "Edo")!;
+    const dayu = berkas.murid.find((item) => item.nama === "Dayu")!;
+    berkas = tambahSumatif(berkas, matematika.id, "Latihan");
+    const butir = berkas.sumatif.find((item) => item.mapelId === matematika.id)!;
+    berkas = setNilaiSumatif(berkas, edo.id, butir.id, 90);
+    berkas = setNilaiSumatif(berkas, dayu.id, butir.id, 70);
+    const urutan = urutanRekap(berkas, berkas.rombel[0]).map((item) => [item.peringkat, item.murid.nama]);
+    expect(urutan).toEqual([[1, "Edo"], [2, "Dayu"]]);
+    const csv = rekapCsv(berkas, berkas.rombel[0]);
+    expect(csv.split("\n")[0]).toMatch(/Peringkat/);
+    expect(csv.indexOf("Edo")).toBeLessThan(csv.indexOf("Dayu"));
   });
 });
 

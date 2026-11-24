@@ -194,6 +194,7 @@ dialog.modal::backdrop { background: rgba(14, 32, 52, 0.45); }
 .modal-kepala { border-bottom: 1px solid var(--garis); }
 .modal-kepala h3 { margin: 0; font-size: 1.05rem; }
 .modal-isi p { margin-top: 0; }
+.tumpuk { display: flex; flex-direction: column; gap: 12px; }
 .modal-aksi {
   display: flex;
   justify-content: flex-end;
